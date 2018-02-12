@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>King Classic 2018: Enter Scores</title>
+		<meta charset="UTF-8">
+	  	<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+	</head>
+	<body>
+    <h2>Enter Scores</h2>
+    <form action='/enter_scores' method='POST' id='submitform'>
+      Select a course:<br>
+      <select name="course">
+        <option value="Talking Stick - O'odham">Talking Stick - O'odham</option>
+        <option value="Talking Stick - Piipaash">Talking Stick - Piipaash</option>
+        <option value="Wildfire - Palmer">Wildfire - Palmer</option>
+        <option value="Wildfire - Faldo">Wildfire - Faldo</option>
+        <option value="Whirlwind - Devil's Claw">Whirlwind - Devil's Claw</option>
+        <option value="Whirlwind - Cattail">Whirlwind - Cattail</option>
+      </select><br><br>
+
+      Select a hole:
+      <select name="hole" method="GET" action="/">
+        {% for hole in holes %}
+        <option value= "{{hole}}" SELECTED>{{hole}}</option>"
+        {% endfor %}
+      </select><br><br>
+
+      Player 1:
+      <select name="player1" method="GET" action="/">
+        {% for player in players %}
+        <option value= "{{player}}" SELECTED>{{player}}</option>"
+        {% endfor %}
+      </select>
+
+      Score:
+      <select name="score1" method="GET" action="/">
+        {% for score in scores %}
+        <option value= "{{score}}" SELECTED>{{score}}</option>"
+        {% endfor %}
+      </select><br><br>
+
+      Player 2:
+      <select name="player2" method="GET" action="/">
+        {% for player in players %}
+        <option value= "{{player}}" SELECTED>{{player}}</option>"
+        {% endfor %}
+      </select>
+
+      Score:
+      <select name="score2" method="GET" action="/">
+        {% for score in scores %}
+        <option value= "{{score}}" SELECTED>{{score}}</option>"
+        {% endfor %}
+      </select><br><br>
+
+      Player 3:
+      <select name="player3" method="GET" action="/">
+        {% for player in players %}
+        <option value= "{{player}}" SELECTED>{{player}}</option>"
+        {% endfor %}
+      </select>
+
+      Score:
+      <select name="score3" method="GET" action="/">
+        {% for score in scores %}
+        <option value= "{{score}}" SELECTED>{{score}}</option>"
+        {% endfor %}
+      </select><br><br>
+
+      Player 4:
+      <select name="player4" method="GET" action="/">
+        {% for player in players %}
+        <option value= "{{player}}" SELECTED>{{player}}</option>"
+        {% endfor %}
+      </select>
+
+      Score:
+      <select name="score4" method="GET" action="/">
+        {% for score in scores %}
+        <option value= "{{score}}" SELECTED>{{score}}</option>"
+        {% endfor %}
+      </select><br><br>
+
+      <input type='submit' value="Submit"/>
+    </form>
+
+    <h4><a href="{{ url_for('index') }}">Home</a></h4>
+    <h6>&copy; 2018 Stuart King</h6>
+  </body>
+</html>

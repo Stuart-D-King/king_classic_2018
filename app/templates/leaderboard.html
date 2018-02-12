@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>King Classic: Leaderboard</title>
+		<meta charset="UTF-8">
+	  	<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+	</head>
+	<body>
+    <h2>Leaderboard</h2>
+    <p>{{leaderboard_df|safe}}</p>
+    <h4><a href="{{ url_for('index') }}">Home</a></h4>
+    <h6>&copy; 2018 Stuart King</h6>
+  </body>
+</html>

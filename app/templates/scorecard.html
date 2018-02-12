@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>King Classic 2018: Scorecard</title>
+		<meta charset="UTF-8">
+	  	<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+		<script language="JavaScript">
+		function toggle(source) {
+		  checkboxes = document.getElementsByName('golfers');
+		  for(var i=0, n=checkboxes.length;i<n;i++) {
+		    checkboxes[i].checked = source.checked;
+		  }
+		}
+		</script>
+	</head>
+	<body>
+    <h2>Scorecard</h2>
+    <form action='/scorecard' method='POST' id='submitform'>
+      Select a course:<br>
+			<select name="scorecard_course">
+        <option value="Talking Stick - O'odham">Talking Stick - O'odham</option>
+        <option value='Talking Stick - Piipaash'>Talking Stick - Piipaash</option>
+        <option value="Wildfire - Palmer">Wildfire - Palmer</option>
+        <option value="Wildfire - Faldo">Wildfire - Faldo</option>
+        <option value="Whirlwind - Devil's Claw">Whirlwind - Devil's Claw</option>
+        <option value="Whirlwind - Cattail">Whirlwind - Cattail</option>
+      </select><br><br>
+
+      Select a player(s):<br>
+			<fieldset>
+				{% for player in players %}
+				<input type="checkbox" name="golfers" value="{{player}}" SELECTED>{{player}}</input><br>
+				{% endfor %}
+				<input type="checkbox" id="selectall" onClick="toggle(this)" value="all">
+				<label for="selectall">Select All</label>
+			</fieldset>
+
+      <br>
+      <input type='submit' value="Submit"/>
+    </form>
+    <p>{{scorecard_df|safe}}</p>
+    <h4><a href="{{ url_for('index') }}">Home</a></h4>
+    <h6>&copy; 2018 Stuart King</h6>
+  </body>
+</html>

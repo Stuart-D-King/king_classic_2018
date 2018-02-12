@@ -1,0 +1,113 @@
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+    text-align: center;
+    font-size: 20px;
+    display: block;
+    width: 100%;
+}
+
+.new-reservation-button {
+  display: inline-block;
+  margin-bottom: 2%;
+}
+
+.form-new-reservation {
+  margin: 0 auto;
+  width: 70%;
+}
+
+.form-label {
+  font-weight: bold;
+  width: 100%;
+  display: block;
+  text-align: left;
+}
+
+.form-input {
+  width: 100%;
+  font-size: 0.85em;
+  margin-bottom: 2%;
+}
+
+.submit-button {
+  margin-top: 2%;
+}
+
+.footer{
+   position: fixed;
+   text-align: center;
+   bottom: 0px;
+   width: 100%;
+}
+
+table {
+    border: 1px solid #dddddd;
+    border-collapse: collapse;
+    text-align: center;
+    padding: 6px;
+    margin: 0px auto;
+    /* margin-bottom: 10px; */
+    /*font-size: 0.9em;*/
+    width: auto;
+}
+
+.centerTable {
+  margin: 0px auto;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+table.dataframe, .dataframe th, .dataframe td {
+    border: 1px solid #dddddd;
+    border-collapse: collapse;
+    text-align: center;
+    padding: 6px;
+    margin: 0px auto;
+    /* margin-bottom: 10px; */
+    /*font-size: 0.9em;*/
+    width: auto;
+}
+
+fieldset {
+    border: 0;
+}
+
+select{
+    font-size:15px;
+}
+
+input[type=submit] {
+    font-size: 17px;
+    padding:5px 15px;
+    background:#ccc;
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+input[type=text] {
+    font-size: 15px;
+    padding:5px;
+    border:2px solid #ccc;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+input[type=checkbox] {
+  transform: scale(1.5);
+}
+
+button {
+ font-family: Arial,Helvetica,sans-serif;
+ font-size: 15px;
+}
