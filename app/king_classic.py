@@ -10,17 +10,13 @@ from scipy.stats import rankdata
 
 class Player(object):
 
-    def __init__(self, name, skins=True):
+    def __init__(self, name, hdcp, courses, skins=True):
         self.name = name
         self.skins = skins
+        self.hdcp = hdcp
         self.scores = dict()
-        self.courses = ["Talking Stick - O'odham",
-                        'Talking Stick - Piipaash',
-                        'Wildfire - Palmer',
-                        'Wildfire - Faldo',
-                        "Whirlwind - Devil's Claw",
-                        'Whirlwind - Cattail']
-        for course in self.courses:
+
+        for course, par in courses.items():
             self.create_scorecard(course)
 
 
@@ -33,7 +29,6 @@ class Player(object):
 
 
     def show_scorecard(self, course):
-        # print(self.scores[course])
         return self.scores[course]
 
 
@@ -47,18 +42,25 @@ class Player(object):
         return back
 
 
-    def calc_course_score(self, course):
+    def calc_course_score(self, course, net=False):
+        if net:
+            net_score = (sum(self.scores[course].values()) - self.hdcp)
+            return net_score
+
         score = sum(self.scores[course].values())
-        # print('Player: {}, Course: {}, Score: {}'.format(self.name, course, score))
         return score
 
 
-    def calc_total_score(self):
+    def calc_total_score(self, net=False):
+        if net:
+            total = 0
+            for course in self.scores.keys():
+                net_total += (sum(self.scores[course].values()) - self.hdcp)
+            return net_total
+
         total = 0
         for course in self.scores.keys():
             total += sum(self.scores[course].values())
-
-        # print('Player: {}, Total Score: {}'.format(self.name, total))
         return total
 
 
@@ -71,12 +73,18 @@ class PlayGolf(object):
         # self.client.drop_database('kc_2018')
         self.db = self.client['kc_{}'.format(year)] # Access/Initiate Database
         self.coll = self.db['scores'] # Access/Initiate Table
+        self.courses = {"Talking Stick - O'odham" : [4,5,4,4,4,3,4,3,4,4,3,4,4,4,4,3,5,4],
+        'Talking Stick - Piipaash' : [4,4,3,4,4,4,5,4,3,4,4,4,3,5,4,5,3,4],
+        'Wildfire - Palmer' : [4,4,5,4,3,4,4,3,5,4,5,4,3,5,3,4,4,4],
+        'Wildfire - Faldo' : [4,4,3,4,4,4,3,4,5,4,5,4,4,3,5,4,3,4],
+        "Whirlwind - Devil's Claw" : [4,4,5,3,4,5,3,4,4,4,4,3,4,3,5,4,5,4],
+        'Whirlwind - Cattail' : [4,5,3,4,4,3,5,4,4,3,4,5,4,4,3,4,5,4]}
 
 
-    def add_player(self, name, skins=True):
-        golfer = Player(name, skins)
+    def add_player(self, name, hdcp, skins=True):
+        golfer = Player(name, hdcp, self.courses, skins)
         golfer_pkl = pickle.dumps(golfer)
-        self.coll.update_one({'name': name}, {'$set': {'name': name, 'player': golfer_pkl, 'skins': skins}}, upsert=True)
+        self.coll.update_one({'name': name}, {'$set': {'name': name, 'player': golfer_pkl, 'skins': skins, 'hdcp': hdcp}}, upsert=True)
 
 
     def add_score(self, player, course, hole, score):
@@ -88,16 +96,18 @@ class PlayGolf(object):
         self.coll.update_one({'name': player}, {'$set': {'player': golfer_pkl}})
 
 
-    def show_player_course_score(self, player, course):
+    def show_player_course_score(self, player, course, net=False):
         doc = self.coll.find_one({'name': player})
         golfer = pickle.loads(doc['player'])
-        score = golfer.calc_course_score(course)
+        score = golfer.calc_course_score(course, net)
+        return score
 
 
-    def show_player_total_score(self, player):
+    def show_player_total_score(self, player, net=False):
         doc = self.coll.find_one({'name': player})
         golfer = pickle.loads(doc['player'])
-        total_score = golfer.calc_total_score()
+        total_score = golfer.calc_total_score(net)
+        return total_score
 
 
     def show_team_score(self, team, course):
@@ -105,7 +115,7 @@ class PlayGolf(object):
         return 'Team: {}, Score: {}'.format(team.keys())
 
 
-    def leaderboard(self):
+    def leaderboard(self, net=True):
         names = []
         players = []
         docs = self.coll.find()
@@ -117,7 +127,8 @@ class PlayGolf(object):
         for player in players:
             total = 0
             for course in player.scores.keys():
-                total += player.calc_course_score(course)
+                if player.calc_course_score(course, net) > 0:
+                    total += player.calc_course_score(course, net)
             scores.append(total)
 
         rank = list(rankdata(scores, method='min'))
@@ -125,18 +136,14 @@ class PlayGolf(object):
         results = list(zip(rank, names, scores))
         sorted_results = sorted(results, key=lambda x: x[0])
 
-        # for order, (name, total) in enumerate(sorted_results):
-        #     print('{}. {}, Score: {}'.format(order+1, name, total))
 
-        df = pd.DataFrame(sorted_results, columns=['Position', 'Name', 'Total'])
+        df = pd.DataFrame(sorted_results, columns=['Position', 'Name', 'Net Total'])
         # df.set_index('Position', inplace=True)
 
         return df
 
 
     def calc_skins(self, course):
-        # print('Skins for {}'.format(course))
-        # print('------------')
         names = []
         players = []
         docs = self.coll.find()
@@ -156,10 +163,6 @@ class PlayGolf(object):
         low_scores = df.min(axis=0)
         skins = []
         for hole, low_score in zip(range(1, 19), low_scores):
-            # if any(df[str(hole)] == 0):
-            #     print('ERROR! Someone recorded an impossible score')
-            #     continue
-
             scores = list(df[str(hole)].values)
             if scores.count(low_score) == 1:
                 skins.append(df[str(hole)].idxmin())
@@ -175,9 +178,6 @@ class PlayGolf(object):
 
         final_results = [(name, skins * skin_value) for name, skins in sorted_results]
 
-        # for name, winnings in final_results:
-        #     print('Player: {}, Skins: {}, Winnings: ${}'.format(name, int(winnings/skin_value), int(winnings)))
-
         df_results = [(name, int(winnings/skin_value), float(winnings)) for name, winnings in final_results]
 
         df = pd.DataFrame(df_results, columns=['Player', 'Skins', 'Winnings'])
@@ -187,33 +187,36 @@ class PlayGolf(object):
 
 
     def player_scorecards(self, players, course):
-        scores = []
+        course_par = self.courses[course]
+        front_par = sum(course_par[:9])
+        back_par = sum(course_par[9:])
+        total_par = sum(course_par)
+        par = course_par[:9] + [front_par] + course_par[9:] + [back_par, total_par, 0, 0]
+        scores = [par]
+
         for player in players:
             doc = self.coll.find_one({'name': player})
             golfer = pickle.loads(doc['player'])
-            # dct = golfer.show_scorecard(course)
-            # scores.append(dct.values())
+
             front = golfer.front_nine(course)
             front_tot = sum(front)
             back = golfer.back_nine(course)
             back_tot = sum(back)
             total = golfer.calc_course_score(course)
-            score = front + back
-            score.insert(9,front_tot)
-            score.append(back_tot)
-            score.append(total)
+            net_total = golfer.calc_course_score(course, net=True)
+
+            score = front + [front_tot] + back + [back_tot, total, golfer.hdcp, net_total]
             scores.append(score)
 
+        idx = ['Par'] + players.copy()
+
         cols = [str(x) for x in range(1, 19)]
-        cols.insert(9, 'Front')
-        cols.extend(['Back', 'Total'])
-        df = pd.DataFrame(data=scores, index=players, columns=cols)
+        all_cols = cols[:9] + ['Front'] + cols[9:] + ['Back', 'Total', 'Hdcp', 'Net']
 
-        # print('Course: {}'.format(course))
-        # print('------------')
-        # for hole, score in dct.items():
-        #     print('Hole: {}, Score: {}'.format(hole, score))
-
+        df = pd.DataFrame(data=scores, index=idx, columns=all_cols)
+        for col in df.columns:
+            df[col] = df[col].astype(str)
+        df.loc['Par'] = df.loc['Par'].replace(['0'],'')
         return df
 
 
@@ -221,11 +224,11 @@ if __name__ == '__main__':
     golf = PlayGolf('2018')
 
     print('Adding players...')
-    golf.add_player('Stuart', True)
-    golf.add_player('Alex', True)
-    golf.add_player('Jerry', True)
-    golf.add_player('Reggie', True)
-    golf.add_player('Elma', True)
+    golf.add_player('Stuart', 2, True)
+    golf.add_player('Alex', 1, True)
+    golf.add_player('Jerry', 5, True)
+    golf.add_player('Reggie', 5, True)
+    golf.add_player('Elma', 8, True)
 
     print("Adding Stuart's scores...")
     golf.add_score('Stuart', 'Talking Stick - Piipaash', 1, 5)
@@ -269,5 +272,5 @@ if __name__ == '__main__':
     # t1_combined, t1_low = team1.calc_team_scores('Talking Stick - Piipaash')
 
     # df = golf.calc_skins("Talking Stick - Piipaash")
-    df = golf.leaderboard()
-    # df = golf.player_scorecards(['Stuart', 'Alex'], 'Talking Stick - Piipaash')
+    # df = golf.leaderboard()
+    df = golf.player_scorecards(['Stuart', 'Alex'], 'Talking Stick - Piipaash')

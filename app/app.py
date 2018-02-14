@@ -27,8 +27,9 @@ def add_player():
     if request.method == 'POST':
         f_name = request.form['first_name']
         l_name = request.form['last_name']
+        hdcp = request.form['hdcp']
         skins = request.form['in_skins']
-        golf.add_player(f_name + ' ' + l_name, skins)
+        golf.add_player(f_name + ' ' + l_name, hdcp, skins)
         return redirect(url_for('add_player'))
 
     return render_template('add_player.html')
@@ -67,10 +68,14 @@ def leaderboard():
 @app.route('/skins', methods=['GET', 'POST'])
 def skins():
     if request.method == 'POST':
-        course = request.form['skins_course']
-        skins_df = golf.calc_skins(course)
-        return render_template('skins.html', skins_df=skins_df.to_html(index=False))
-        # return redirect(url_for('skins'))
+        try:
+            course = request.form['skins_course']
+            skins_df = golf.calc_skins(course)
+            return render_template('skins.html', skins_df=skins_df.to_html(index=False))
+            # return redirect(url_for('skins'))
+        except:
+            error_msg = 'No skins were won'
+            return render_template('skins.html', error_msg=error_msg)
 
     return render_template('skins.html')
 
