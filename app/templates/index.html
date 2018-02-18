@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>King Classic 2018</title>
+		<title>King Classic</title>
 		<meta charset="UTF-8">
 	  	<meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
@@ -11,8 +11,8 @@
     <h5>Scottsdale, Arizona &#9679; May 16-18</h5>
     <h4><a href="{{ url_for('add_player') }}">Add a Player</a></h4>
     <h4><a href="{{ url_for('enter_scores') }}">Enter Scores</a></h4>
-    <h4><a href="{{ url_for('skins') }}">Skins</a></h4>
     <h4><a href="{{ url_for('leaderboard') }}">Leaderboard</a></h4>
+		<h4><a href="{{ url_for('skins') }}">Skins</a></h4>
     <h4><a href="{{ url_for('scorecard') }}">Scorecards</a></h4>
     <h4><a href="{{ url_for('past_results') }}">Past Results</a></h4>
     <h6>&copy; 2018 Stuart King</h6>

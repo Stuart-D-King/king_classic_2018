@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>King Classic 2018: Enter Scores</title>
+		<title>King Classic: Enter Scores</title>
 		<meta charset="UTF-8">
 	  	<meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
@@ -84,7 +84,7 @@
 
       <input type='submit' value="Submit"/>
     </form>
-
+		<h4>{{msg|safe}}</h4>
     <h4><a href="{{ url_for('index') }}">Home</a></h4>
     <h6>&copy; 2018 Stuart King</h6>
   </body>

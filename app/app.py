@@ -15,13 +15,13 @@ def index():
     return render_template('index.html')
 
 
-# past results
+# past results page
 @app.route('/past_results', methods=['GET'])
 def past_results():
     return render_template('past_results.html')
 
 
-# add a player
+# add a player page
 @app.route('/add_player', methods=['GET', 'POST'])
 def add_player():
     if request.method == 'POST':
@@ -35,24 +35,35 @@ def add_player():
     return render_template('add_player.html')
 
 
-# enter scores
+# enter scores page
 @app.route('/enter_scores', methods=['GET', 'POST'])
 def enter_scores():
     players = golf.coll.distinct('name')
+    players.sort()
     players.append('None')
     holes = [x for x in range(1,19)][::-1]
     scores = [x for x in range(1,11)][::-1]
     scores.append('None')
     if request.method == 'POST':
-        course = request.form['course']
-        hole = int(request.form['hole'])
-        golfers = [request.form['player1'], request.form['player2'], request.form['player3'], request.form['player4']]
-        g_scores = [int(request.form['score1']), int(request.form['score2']), int(request.form['score3']), int(request.form['score4'])]
-        gns = list(zip(golfers, g_scores))
-        for golfer, score in gns:
-            golf.add_score(golfer, course, hole, score)
-        # return render_template('enter_scores.html', players=players, holes=holes, scores=scores)
-        return redirect(url_for('enter_scores'))
+        try:
+            course = request.form['course']
+            hole = int(request.form['hole'])
+
+            golfers = [request.form['player1'], request.form['player2'], request.form['player3'], request.form['player4']]
+            golfers = [golfer for golfer in golfers if golfer != 'None']
+
+            g_scores = [request.form['score1'], request.form['score2'], request.form['score3'], request.form['score4']]
+            g_scores = [int(score) for score in g_scores if score != 'None']
+
+            gns = list(zip(golfers, g_scores))
+            for golfer, score in gns:
+                golf.add_score(golfer, course, hole, score)
+
+            msg = 'Scores entered successfully!'
+            return render_template('enter_scores.html', players=players, holes=holes, scores=scores, msg=msg)
+        except:
+            msg = 'An error occurred. Please try again.'
+            return render_template('enter_scores.html', players=players, holes=holes, scores=scores, msg=msg)
 
     return render_template('enter_scores.html', players=players, holes=holes, scores=scores)
 
@@ -84,6 +95,7 @@ def skins():
 @app.route('/scorecard', methods=['GET', 'POST'])
 def scorecard():
     players = golf.coll.distinct('name')
+    players.sort()
     if request.method == 'POST':
         course = request.form['scorecard_course']
         golfers = request.form.getlist('golfers')

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>King Classic 2018: Scorecard</title>
+		<title>King Classic: Scorecard</title>
 		<meta charset="UTF-8">
 	  	<meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
@@ -29,15 +29,32 @@
       </select><br><br>
 
       Select a player(s):<br>
-			<fieldset>
+			<!-- <fieldset>
 				{% for player in players %}
 				<input type="checkbox" name="golfers" value="{{player}}" SELECTED>{{player}}</input><br>
 				{% endfor %}
 				<input type="checkbox" id="selectall" onClick="toggle(this)" value="all">
 				<label for="selectall">Select All</label>
-			</fieldset>
+			</fieldset> -->
 
-      <br>
+			<fieldset>
+				<ul>
+					{% for player in players %}
+					<li>
+						<input type="checkbox" name="golfers" value="{{player}}" id="{{player}}">
+						<label for="{{player}}">{{player|safe}}</label>
+						<br>
+					</li>
+					{% endfor %}
+
+					<li>
+						<input type="checkbox" id="selectall" onClick="toggle(this)" value="all">
+						<label for="selectall">Select All</label>
+						<br>
+					</li>
+				</ul>
+			</fieldset>
+			<br>
       <input type='submit' value="Submit"/>
     </form>
     <p>{{scorecard_df|safe}}</p>
