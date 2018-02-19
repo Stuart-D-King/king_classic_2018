@@ -22,75 +22,137 @@
 
       Hole:<br>
       <select name="hole" method="GET" action="/">
-	      {% for hole in holes %}
-	      <option value= "{{hole}}" SELECTED>{{hole}}</option>"
-	      {% endfor %}
 				<option selected value="0" readonly="readonly">-- select hole --</option>
-      </select><br><br>
-
-      Player 1:
-      <select name="player1" method="GET" action="/">
-				{% for player in players %}
-        <option value= "{{player}}" SELECTED>{{player}}</option>"
-        {% endfor %}
-				<option selected value="None" readonly="readonly">-- select player --</option>
+				{% for hole in holes %}
+	      <option value="{{hole}}">{{hole}}</option>"
+	      {% endfor %}
       </select>
 
-      Score:
-      <select name="score1" method="GET" action="/">
-				{% for score in scores %}
-        <option value= "{{score}}" SELECTED>{{score}}</option>"
-        {% endfor %}
-				<option selected value="None" readonly="readonly">-- select score --</option>
-      </select><br><br>
+			<br><br>
 
-      Player 2:
-      <select name="player2" method="GET" action="/">
-        {% for player in players %}
-        <option value= "{{player}}" SELECTED>{{player}}</option>"
-        {% endfor %}
-				<option selected value="None" readonly="readonly">-- select player --</option>
-      </select>
+			<table>
+        <tr>
+					<td colspan='2'><b>Player 1</b></td>
+        </tr>
+				<tr>
+	        <td>Name:</td>
+	        <td>
+						<select name="player1" method="GET" action="/">
+							<option selected value="None" readonly="readonly">-- select player --</option>
+							{% for player in players %}
+			        <option value="{{player}}">{{player}}</option>"
+			        {% endfor %}
+			      </select>
+	          <!-- <input type="text" value="@Model.Mem_ResAdd1" name="Mem_ResAdd1" /> -->
+	        </td>
+				</tr>
+				<tr>
+	        <td>Score:</td>
+	        <td>
+						<select name="score1" method="GET" action="/">
+							<option selected value="None" readonly="readonly">-- select score --</option>
+							{% for score in scores %}
+			        <option value="{{score}}">{{score}}</option>"
+			        {% endfor %}
+			      </select>
+	          <!-- <input type="text" value="@Model.Mem_ResAdd1" name="Mem_ResAdd1" /> -->
+	        </td>
+        </tr>
+			</table>
 
-      Score:
-      <select name="score2" method="GET" action="/">
-        {% for score in scores %}
-        <option value= "{{score}}" SELECTED>{{score}}</option>"
-        {% endfor %}
-				<option selected value="None" readonly="readonly">-- select score --</option>
-      </select><br><br>
+			<br>
 
-      Player 3:
-      <select name="player3" method="GET" action="/">
-        {% for player in players %}
-        <option value= "{{player}}" SELECTED>{{player}}</option>"
-        {% endfor %}
-				<option selected value="None" readonly="readonly">-- select player --</option>
-      </select>
+			<table>
+        <tr>
+					<td colspan='2'> <b>Player 2</b></td>
+        </tr>
+				<tr>
+	        <td>Name:</td>
+	        <td>
+						<select name="player2" method="GET" action="/">
+							<option selected value="None" readonly="readonly">-- select player --</option>
+							{% for player in players %}
+			        <option value="{{player}}">{{player}}</option>"
+			        {% endfor %}
+			      </select>
+	          <!-- <input type="text" value="@Model.Mem_ResAdd1" name="Mem_ResAdd1" /> -->
+	        </td>
+				</tr>
+				<tr>
+	        <td>Score:</td>
+	        <td>
+						<select name="score2" method="GET" action="/">
+							<option selected value="None" readonly="readonly">-- select score --</option>
+							{% for score in scores %}
+			        <option value="{{score}}">{{score}}</option>"
+			        {% endfor %}
+			      </select>
+	          <!-- <input type="text" value="@Model.Mem_ResAdd1" name="Mem_ResAdd1" /> -->
+	        </td>
+        </tr>
+			</table>
 
-      Score:
-      <select name="score3" method="GET" action="/">
-        {% for score in scores %}
-        <option value= "{{score}}" SELECTED>{{score}}</option>"
-        {% endfor %}
-				<option selected value="None" readonly="readonly">-- select score --</option>
-      </select><br><br>
+			<br>
 
-      Player 4:
-      <select name="player4" method="GET" action="/">
-        {% for player in players %}
-        <option value= "{{player}}" SELECTED>{{player}}</option>"
-        {% endfor %}
-				<option selected value="None" readonly="readonly">-- select player --</option>
-      </select>
+			<table>
+				<tr>
+					<td colspan='2'><b>Player 3</b></td>
+				</tr>
+				<tr>
+					<td>Name:</td>
+					<td>
+						<select name="player3" method="GET" action="/">
+							<option selected value="None" readonly="readonly">-- select player --</option>
+							{% for player in players %}
+							<option value="{{player}}">{{player}}</option>"
+							{% endfor %}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Score:</td>
+					<td>
+						<select name="score3" method="GET" action="/">
+							<option selected value="None" readonly="readonly">-- select score --</option>
+							{% for score in scores %}
+							<option value="{{score}}">{{score}}</option>"
+							{% endfor %}
+						</select>
+					</td>
+				</tr>
+			</table>
 
-      Score:
-      <select name="score4" method="GET" action="/">
-        {% for score in scores %}
-        <option value= "{{score}}" SELECTED>{{score}}</option>"
-        {% endfor %}
-				<option selected value="None" readonly="readonly">-- select score --</option>
-      </select><br><br>
+			<br>
+
+			<table>
+				<tr>
+					<td colspan='2'> <b>Player 4</b></td>
+				</tr>
+				<tr>
+					<td>Name:</td>
+					<td>
+						<select name="player4" method="GET" action="/">
+							<option selected value="None" readonly="readonly">-- select player --</option>
+							{% for player in players %}
+							<option value="{{player}}">{{player}}</option>"
+							{% endfor %}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Score:</td>
+					<td>
+						<select name="score4" method="GET" action="/">
+							<option selected value="None" readonly="readonly">-- select score --</option>
+							{% for score in scores %}
+							<option value="{{score}}">{{score}}</option>"
+							{% endfor %}
+						</select>
+					</td>
+				</tr>
+			</table>
+
+			<br>
 
       <input type='submit' value="Submit"/>
     </form>

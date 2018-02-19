@@ -3,6 +3,7 @@ import pandas as pd
 from pymongo import MongoClient
 from king_classic import PlayGolf, Player
 from flask import Flask, request, redirect, url_for, render_template
+from collections import Counter
 import pdb
 
 app = Flask(__name__)
@@ -54,8 +55,8 @@ def enter_scores():
     players = golf.coll.distinct('name')
     players.sort()
     # players.append('None')
-    holes = [x for x in range(1,19)][::-1]
-    scores = [x for x in range(1,11)][::-1]
+    holes = [x for x in range(1,19)]
+    scores = [x for x in range(1,11)]
     # scores.append('None')
     if request.method == 'POST':
         try:
@@ -70,6 +71,10 @@ def enter_scores():
 
             if course == 'None' or hole == 0 or not g_scores or not golfers:
                 msg = 'An error occured. Please ensure a course, hole, and at least one golfer and score are selected.'
+                return render_template('enter_scores.html', players=players, holes=holes, scores=scores, msg=msg)
+
+            if len([x for x, count in Counter(golfers).items() if count > 1]) >= 1:
+                msg = 'The same golfer was selected twice. Please try again.'
                 return render_template('enter_scores.html', players=players, holes=holes, scores=scores, msg=msg)
 
             gns = list(zip(golfers, g_scores))
