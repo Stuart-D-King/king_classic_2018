@@ -3,8 +3,8 @@
 	<head>
 		<title>King Classic: Skins</title>
 		<meta charset="UTF-8">
-	  	<meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 	</head>
 	<body>
     <h2>Skins</h2>
@@ -27,6 +27,5 @@
 		<h4>{{no_skins_msg|safe}}</h4>
 		<h4>{{error_msg|safe}}</h4>
     <h4><a href="{{ url_for('index') }}">Home</a></h4>
-    <h6>&copy; 2018 Stuart King</h6>
   </body>
 </html>

@@ -3,8 +3,8 @@
 	<head>
 		<title>King Classic: Scorecard</title>
 		<meta charset="UTF-8">
-	  	<meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 
 		<script language="JavaScript">
 		function toggle(source) {
@@ -62,6 +62,5 @@
 		<h4>{{course|safe}}</h4>
     <p>{{scorecard_df|safe}}</p>
     <h4><a href="{{ url_for('index') }}">Home</a></h4>
-    <h6>&copy; 2018 Stuart King</h6>
   </body>
 </html>
