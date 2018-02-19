@@ -10,7 +10,7 @@ import folium
 
 
 def past_locations_map():
-    m = folium.Map(location=[40, -98], zoom_start=4)
+    m = folium.Map(location=[40, -98], zoom_start=5)
 
     folium.Marker([36.805531, -114.06719], popup='2017 - Mesquite, NV - Alex King').add_to(m)
     folium.Marker([41.878114, -87.629798], popup='2016 - Chicago, IL - Jerry King').add_to(m)
@@ -242,52 +242,31 @@ class PlayGolf(object):
 
 
 if __name__ == '__main__':
-    # past_locations_map()
-    golf = PlayGolf('2018')
-
-    print('Adding players...')
-    golf.add_player('Stuart', 2, True)
-    golf.add_player('Alex', 1, True)
-    golf.add_player('Jerry', 5, True)
-    golf.add_player('Reggie', 5, True)
-
-    print("Adding Stuart's scores...")
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Stuart', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
-        golf.add_score('Stuart', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
-
-    print("Adding Alex's scores...")
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Alex', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
-        golf.add_score('Alex', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
-
-    print("Adding Jerry's scores...")
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Jerry', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
-        golf.add_score('Jerry', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
-
-    print("Adding Reggie's scores...")
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Reggie', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
-        golf.add_score('Reggie', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
-
-
-    # golf.player_scorecard('Stuart', 'Talking Stick - Piipaash')
-    # tsp_stu = golf.show_player_course_score('Stuart', 'Talking Stick - Piipaash')
-    # total_stu = golf.show_player_total_score('Stuart')
-
-    # golf.player_scorecard('Alex', 'Talking Stick - Piipaash')
-    # tsp_stu = golf.show_player_course_score('Alex', 'Talking Stick - Piipaash')
-    # total_stu = golf.show_player_total_score('Alex')
-
-    # golf.player_scorecard('Jerry', 'Talking Stick - Piipaash')
-    # tsp_stu = golf.show_player_course_score('Jerry', 'Talking Stick - Piipaash')
-    # total_stu = golf.show_player_total_score('Jerry')
-
-    # group1 = [stuart, alex, jerry]
-    # team1 = Team(group1)
-    # t1_combined, t1_low = team1.calc_team_scores('Talking Stick - Piipaash')
-
-    # df = golf.calc_skins("Talking Stick - Piipaash")
-    # df = golf.leaderboard()
-    # df = golf.player_scorecards(['Stuart', 'Alex'], 'Talking Stick - Piipaash')
+    past_locations_map()
+    # golf = PlayGolf('2018')
+    #
+    # print('Adding players...')
+    # golf.add_player('Stuart', 2, True)
+    # golf.add_player('Alex', 1, True)
+    # golf.add_player('Jerry', 5, True)
+    # golf.add_player('Reggie', 5, True)
+    #
+    # print("Adding Stuart's scores...")
+    # for idx, _ in enumerate(range(18)):
+    #     golf.add_score('Stuart', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
+    #     golf.add_score('Stuart', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
+    #
+    # print("Adding Alex's scores...")
+    # for idx, _ in enumerate(range(18)):
+    #     golf.add_score('Alex', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
+    #     golf.add_score('Alex', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
+    #
+    # print("Adding Jerry's scores...")
+    # for idx, _ in enumerate(range(18)):
+    #     golf.add_score('Jerry', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
+    #     golf.add_score('Jerry', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
+    #
+    # print("Adding Reggie's scores...")
+    # for idx, _ in enumerate(range(18)):
+    #     golf.add_score('Reggie', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
+    #     golf.add_score('Reggie', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
