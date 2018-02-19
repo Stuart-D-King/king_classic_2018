@@ -31,11 +31,18 @@ def past_results():
 @app.route('/add_player', methods=['GET', 'POST'])
 def add_player():
     if request.method == 'POST':
-        f_name = request.form['first_name']
-        l_name = request.form['last_name']
-        hdcp = request.form['hdcp']
+        f_name = request.form['first_name'].capitalize()
+        l_name = request.form['last_name'].capitalize()
+        hdcp = int(request.form['hdcp'])
         skins = request.form['in_skins']
-        golf.add_player(f_name + ' ' + l_name, hdcp, skins)
+        if skins == 'True':
+            skins = True
+        else:
+            skins = False
+        full_name = f_name + ' ' + l_name
+        full_name = full_name.strip()
+        pdb.set_trace()
+        golf.add_player(full_name, hdcp, skins)
         return redirect(url_for('add_player'))
 
     return render_template('add_player.html')
@@ -60,7 +67,7 @@ def enter_scores():
 
             g_scores = [request.form['score1'], request.form['score2'], request.form['score3'], request.form['score4']]
             g_scores = [int(score) for score in g_scores if score != "None"]
-            
+
             if course == 'None' or hole == 0 or not g_scores or not golfers:
                 msg = 'An error occured. Please ensure a course, hole, and at least one golfer and score are selected.'
                 return render_template('enter_scores.html', players=players, holes=holes, scores=scores, msg=msg)
