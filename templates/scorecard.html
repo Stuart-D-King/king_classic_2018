@@ -42,14 +42,14 @@
 				<ul>
 					{% for player in players %}
 					<li>
-						<input type="checkbox" name="golfers" value="{{player}}" id="{{player}}">
+						<input type="checkbox" name="golfers" value="{{player}}" id="{{player}}" class="paddingClass">
 						<label for="{{player}}">{{player|safe}}</label>
 						<br>
 					</li>
 					{% endfor %}
 
 					<li>
-						<input type="checkbox" id="selectall" onClick="toggle(this)" value="all">
+						<input type="checkbox" id="selectall" onClick="toggle(this)" value="all" class="paddingClass">
 						<label for="selectall">Select All</label>
 						<br>
 					</li>
