@@ -18,9 +18,10 @@
 	<body>
     <h2>Scorecard</h2>
     <form action='/scorecard' method='POST' id='submitform'>
-      Select a course:<br>
+      Course:<br>
 			<select name="scorecard_course">
-        <option value="Talking Stick - O'odham">Talking Stick - O'odham</option>
+				<option selected value="None" readonly="readonly">-- select course --</option>
+				<option value="Talking Stick - O'odham">Talking Stick - O'odham</option>
         <option value='Talking Stick - Piipaash'>Talking Stick - Piipaash</option>
         <option value="Wildfire - Palmer">Wildfire - Palmer</option>
         <option value="Wildfire - Faldo">Wildfire - Faldo</option>
@@ -28,7 +29,7 @@
         <option value="Whirlwind - Cattail">Whirlwind - Cattail</option>
       </select><br><br>
 
-      Select a player(s):<br>
+      Select Player(s):<br>
 			<!-- <fieldset>
 				{% for player in players %}
 				<input type="checkbox" name="golfers" value="{{player}}" SELECTED>{{player}}</input><br>
@@ -57,6 +58,8 @@
 			<br>
       <input type='submit' value="Submit"/>
     </form>
+		<h4>{{msg|safe}}</h4>
+		<h4>{{course|safe}}</h4>
     <p>{{scorecard_df|safe}}</p>
     <h4><a href="{{ url_for('index') }}">Home</a></h4>
     <h6>&copy; 2018 Stuart King</h6>

@@ -9,8 +9,9 @@
 	<body>
     <h2>Skins</h2>
     <form action='/skins' method='POST' id='submitform'>
-      Select a course:<br>
+      Course:<br>
       <select name="skins_course">
+				<option selected value="None" readonly="readonly">-- select course --</option>
         <option value="Talking Stick - O'odham">Talking Stick - O'odham</option>
         <option value='Talking Stick - Piipaash'>Talking Stick - Piipaash</option>
         <option value="Wildfire - Palmer">Wildfire - Palmer</option>
@@ -21,7 +22,9 @@
       <br><br>
       <input type='submit' value="Submit"/>
     </form>
+		<h4>{{c|safe}}</h4>
     <p>{{skins_df|safe}}</p>
+		<h4>{{no_skins_msg|safe}}</h4>
 		<h4>{{error_msg|safe}}</h4>
     <h4><a href="{{ url_for('index') }}">Home</a></h4>
     <h6>&copy; 2018 Stuart King</h6>

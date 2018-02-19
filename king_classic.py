@@ -6,6 +6,27 @@ import pdb
 from pymongo import MongoClient
 from collections import defaultdict
 from scipy.stats import rankdata
+import folium
+
+
+def past_locations_map():
+    m = folium.Map(location=[40, -98], zoom_start=4)
+
+    folium.Marker([36.805531, -114.06719], popup='2017 - Mesquite, NV - Alex King').add_to(m)
+    folium.Marker([41.878114, -87.629798], popup='2016 - Chicago, IL - Jerry King').add_to(m)
+    folium.Marker([34.502587, -84.951054], popup='2015 - Georgia - Stuart King').add_to(m)
+    folium.Marker([42.331427, -83.045754], popup='2014 - Michigan - Reggie Sherrill').add_to(m)
+    folium.Marker([39.739236, -104.990251], popup='2013 - Denver, CO - Stuart King').add_to(m)
+    folium.Marker([47.677683, -116.780466], popup="2012 - Coeur d'Alene, ID - Jerry King").add_to(m)
+    folium.Marker([37.096528, -113.568416], popup='2011 - St. George, UT - Reggie Sherrill').add_to(m)
+    folium.Marker([38.291859, -122.458036], popup='2010 - Northern California - Alex King').add_to(m)
+    folium.Marker([39.237685, -120.02658], popup='2009 - Lake Tahoe, CA - Alex King').add_to(m)
+    folium.Marker([47.606209, -122.332071], popup='2008 - Seattle, WA - Alex King').add_to(m)
+    folium.Marker([35.960638, -83.920739], popup='2007 - Tennessee - Stuart King').add_to(m)
+    folium.Marker([33.520661, -86.80249], popup='2006 - Alabama - Gary Olson').add_to(m)
+    folium.Marker([32.366805, -86.299969], popup='2005 - Alabama - Stuart King').add_to(m)
+
+    m.save('templates/past_locations.html')
 
 
 class Player(object):
@@ -221,6 +242,7 @@ class PlayGolf(object):
 
 
 if __name__ == '__main__':
+    # past_locations_map()
     golf = PlayGolf('2018')
 
     print('Adding players...')
@@ -228,32 +250,27 @@ if __name__ == '__main__':
     golf.add_player('Alex', 1, True)
     golf.add_player('Jerry', 5, True)
     golf.add_player('Reggie', 5, True)
-    golf.add_player('Elma', 8, True)
 
     print("Adding Stuart's scores...")
-    golf.add_score('Stuart', 'Talking Stick - Piipaash', 1, 5)
-    golf.add_score('Stuart', 'Talking Stick - Piipaash', 2, 4)
-    golf.add_score('Stuart', 'Talking Stick - Piipaash', 3, 5)
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Stuart', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
+        golf.add_score('Stuart', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
 
     print("Adding Alex's scores...")
-    golf.add_score('Alex', 'Talking Stick - Piipaash', 1, 4)
-    golf.add_score('Alex', 'Talking Stick - Piipaash', 2, 4)
-    golf.add_score('Alex', 'Talking Stick - Piipaash', 3, 3)
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Alex', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
+        golf.add_score('Alex', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
 
     print("Adding Jerry's scores...")
-    golf.add_score('Jerry', 'Talking Stick - Piipaash', 1, 6)
-    golf.add_score('Jerry', 'Talking Stick - Piipaash', 2, 5)
-    golf.add_score('Jerry', 'Talking Stick - Piipaash', 3, 4)
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Jerry', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
+        golf.add_score('Jerry', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
 
     print("Adding Reggie's scores...")
-    golf.add_score('Reggie', 'Talking Stick - Piipaash', 1, 3)
-    golf.add_score('Reggie', 'Talking Stick - Piipaash', 2, 6)
-    golf.add_score('Reggie', 'Talking Stick - Piipaash', 3, 6)
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Reggie', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
+        golf.add_score('Reggie', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
 
-    print("Adding Elma's scores...")
-    golf.add_score('Elma', 'Talking Stick - Piipaash', 1, 5)
-    golf.add_score('Elma', 'Talking Stick - Piipaash', 2, 7)
-    golf.add_score('Elma', 'Talking Stick - Piipaash', 3, 6)
 
     # golf.player_scorecard('Stuart', 'Talking Stick - Piipaash')
     # tsp_stu = golf.show_player_course_score('Stuart', 'Talking Stick - Piipaash')
@@ -273,4 +290,4 @@ if __name__ == '__main__':
 
     # df = golf.calc_skins("Talking Stick - Piipaash")
     # df = golf.leaderboard()
-    df = golf.player_scorecards(['Stuart', 'Alex'], 'Talking Stick - Piipaash')
+    # df = golf.player_scorecards(['Stuart', 'Alex'], 'Talking Stick - Piipaash')

@@ -15,6 +15,12 @@ def index():
     return render_template('index.html')
 
 
+# locations map
+@app.route('/past_locations', methods=['GET'])
+def past_locations():
+    return render_template('past_locations.html')
+
+
 # past results page
 @app.route('/past_results', methods=['GET'])
 def past_results():
@@ -40,10 +46,10 @@ def add_player():
 def enter_scores():
     players = golf.coll.distinct('name')
     players.sort()
-    players.append('None')
+    # players.append('None')
     holes = [x for x in range(1,19)][::-1]
     scores = [x for x in range(1,11)][::-1]
-    scores.append('None')
+    # scores.append('None')
     if request.method == 'POST':
         try:
             course = request.form['course']
@@ -53,14 +59,20 @@ def enter_scores():
             golfers = [golfer for golfer in golfers if golfer != 'None']
 
             g_scores = [request.form['score1'], request.form['score2'], request.form['score3'], request.form['score4']]
-            g_scores = [int(score) for score in g_scores if score != 'None']
+            g_scores = [int(score) for score in g_scores if score != "None"]
+            
+            if course == 'None' or hole == 0 or not g_scores or not golfers:
+                msg = 'An error occured. Please ensure a course, hole, and at least one golfer and score are selected.'
+                return render_template('enter_scores.html', players=players, holes=holes, scores=scores, msg=msg)
 
             gns = list(zip(golfers, g_scores))
             for golfer, score in gns:
                 golf.add_score(golfer, course, hole, score)
 
+            scorecard_df = golf.player_scorecards(golfers, course)
             msg = 'Scores entered successfully!'
-            return render_template('enter_scores.html', players=players, holes=holes, scores=scores, msg=msg)
+
+            return render_template('enter_scores.html', players=players, holes=holes, scores=scores, msg=msg, scorecard_df=scorecard_df.to_html(), course=course)
         except:
             msg = 'An error occurred. Please try again.'
             return render_template('enter_scores.html', players=players, holes=holes, scores=scores, msg=msg)
@@ -81,12 +93,17 @@ def skins():
     if request.method == 'POST':
         try:
             course = request.form['skins_course']
+            if course == 'None':
+                error_msg = 'Please select a course'
+                return render_template('skins.html', error_msg=error_msg)
+            # pdb.set_trace()
             skins_df = golf.calc_skins(course)
-            return render_template('skins.html', skins_df=skins_df.to_html(index=False))
-            # return redirect(url_for('skins'))
+
+            return render_template('skins.html', skins_df=skins_df.to_html(index=False), c=course)
+
         except:
-            error_msg = 'No skins were won'
-            return render_template('skins.html', error_msg=error_msg)
+            no_skins_msg = 'No skins were won'
+            return render_template('skins.html', no_skins_msg=no_skins_msg)
 
     return render_template('skins.html')
 
@@ -98,9 +115,13 @@ def scorecard():
     players.sort()
     if request.method == 'POST':
         course = request.form['scorecard_course']
+        if course == 'None':
+            msg = 'Please select a course'
+            return render_template('scorecard.html', players=players, msg=msg)
+
         golfers = request.form.getlist('golfers')
         scorecard_df = golf.player_scorecards(golfers, course)
-        return render_template('scorecard.html', players=players, scorecard_df=scorecard_df.to_html())
+        return render_template('scorecard.html', players=players, scorecard_df=scorecard_df.to_html(), course=course)
 
     return render_template('scorecard.html', players=players)
 

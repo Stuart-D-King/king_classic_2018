@@ -9,8 +9,9 @@
 	<body>
     <h2>Enter Scores</h2>
     <form action='/enter_scores' method='POST' id='submitform'>
-      Select a course:<br>
+      Course:<br>
       <select name="course">
+				<option selected value="None" readonly="readonly">-- select course --</option>
         <option value="Talking Stick - O'odham">Talking Stick - O'odham</option>
         <option value="Talking Stick - Piipaash">Talking Stick - Piipaash</option>
         <option value="Wildfire - Palmer">Wildfire - Palmer</option>
@@ -19,25 +20,28 @@
         <option value="Whirlwind - Cattail">Whirlwind - Cattail</option>
       </select><br><br>
 
-      Select a hole:
+      Hole:<br>
       <select name="hole" method="GET" action="/">
-        {% for hole in holes %}
-        <option value= "{{hole}}" SELECTED>{{hole}}</option>"
-        {% endfor %}
+	      {% for hole in holes %}
+	      <option value= "{{hole}}" SELECTED>{{hole}}</option>"
+	      {% endfor %}
+				<option selected value="0" readonly="readonly">-- select hole --</option>
       </select><br><br>
 
       Player 1:
       <select name="player1" method="GET" action="/">
-        {% for player in players %}
+				{% for player in players %}
         <option value= "{{player}}" SELECTED>{{player}}</option>"
         {% endfor %}
+				<option selected value="None" readonly="readonly">-- select player --</option>
       </select>
 
       Score:
       <select name="score1" method="GET" action="/">
-        {% for score in scores %}
+				{% for score in scores %}
         <option value= "{{score}}" SELECTED>{{score}}</option>"
         {% endfor %}
+				<option selected value="None" readonly="readonly">-- select score --</option>
       </select><br><br>
 
       Player 2:
@@ -45,6 +49,7 @@
         {% for player in players %}
         <option value= "{{player}}" SELECTED>{{player}}</option>"
         {% endfor %}
+				<option selected value="None" readonly="readonly">-- select player --</option>
       </select>
 
       Score:
@@ -52,6 +57,7 @@
         {% for score in scores %}
         <option value= "{{score}}" SELECTED>{{score}}</option>"
         {% endfor %}
+				<option selected value="None" readonly="readonly">-- select score --</option>
       </select><br><br>
 
       Player 3:
@@ -59,6 +65,7 @@
         {% for player in players %}
         <option value= "{{player}}" SELECTED>{{player}}</option>"
         {% endfor %}
+				<option selected value="None" readonly="readonly">-- select player --</option>
       </select>
 
       Score:
@@ -66,6 +73,7 @@
         {% for score in scores %}
         <option value= "{{score}}" SELECTED>{{score}}</option>"
         {% endfor %}
+				<option selected value="None" readonly="readonly">-- select score --</option>
       </select><br><br>
 
       Player 4:
@@ -73,6 +81,7 @@
         {% for player in players %}
         <option value= "{{player}}" SELECTED>{{player}}</option>"
         {% endfor %}
+				<option selected value="None" readonly="readonly">-- select player --</option>
       </select>
 
       Score:
@@ -80,11 +89,14 @@
         {% for score in scores %}
         <option value= "{{score}}" SELECTED>{{score}}</option>"
         {% endfor %}
+				<option selected value="None" readonly="readonly">-- select score --</option>
       </select><br><br>
 
       <input type='submit' value="Submit"/>
     </form>
 		<h4>{{msg|safe}}</h4>
+		<h4>{{course|safe}}</h4>
+		<p>{{scorecard_df|safe}}</p>
     <h4><a href="{{ url_for('index') }}">Home</a></h4>
     <h6>&copy; 2018 Stuart King</h6>
   </body>
