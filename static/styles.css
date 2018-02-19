@@ -43,10 +43,6 @@ table {
     width: auto;
 }
 
-.centerTable {
-  margin: 0px auto;
-}
-
 td, th {
     border: 1px solid #dddddd;
     text-align: center;
