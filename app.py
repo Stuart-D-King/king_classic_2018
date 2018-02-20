@@ -6,6 +6,7 @@ from flask import Flask, request, redirect, url_for, render_template
 from collections import Counter
 import pdb
 
+
 app = Flask(__name__)
 golf = PlayGolf('2018')
 
@@ -14,6 +15,12 @@ golf = PlayGolf('2018')
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
+
+
+# general info page
+@app.route('/general_info', methods=['GET'])
+def general_info():
+    return render_template('general_info.html')
 
 
 # locations map
