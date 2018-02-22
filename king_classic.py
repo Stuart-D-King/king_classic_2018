@@ -36,29 +36,51 @@ class Player(object):
         self.skins = skins
         self.hdcp = hdcp
         self.scores = dict()
+        self.net_scores = dict()
+        self.courses = courses
 
-        for course, par in courses.items():
+        for course, (par, hdcps) in self.courses.items():
             self.create_scorecard(course)
 
 
     def create_scorecard(self, course):
         self.scores[course] = dict((x,0) for x in range(1,19))
+        self.net_scores[course] = dict((x,0) for x in range(1,19))
 
 
     def post_score(self, course, hole, score):
         self.scores[course][hole] = score
 
+        par, hdcps = self.courses[course]
+        hole_hdcp = hdcps[hole - 1]
 
-    def show_scorecard(self, course):
+        if hole_hdcp <= self.hdcp:
+            self.net_scores[course][hole] = score - 1
+        else:
+            self.net_scores[course][hole] = score
+
+
+    def show_scorecard(self, course, net=False):
+        if net:
+            return self.net_scores[course]
+
         return self.scores[course]
 
 
-    def front_nine(self, course):
+    def front_nine(self, course, net=False):
+        if net:
+            front = [v for k, v in self.net_scores[course].items()][:9]
+            return front
+
         front = [v for k, v in self.scores[course].items()][:9]
         return front
 
 
-    def back_nine(self, course):
+    def back_nine(self, course, net=False):
+        if net:
+            back = [v for k,v in self.net_scores[course].items()][9:]
+            return back
+
         back = [v for k, v in self.scores[course].items()][9:]
         return back
 
@@ -91,15 +113,15 @@ class PlayGolf(object):
     def __init__(self, year):
         self.year = year
         self.client = MongoClient()
-        # self.client.drop_database('kc_2018')
+        self.client.drop_database('kc_2018')
         self.db = self.client['kc_{}'.format(year)] # Access/Initiate Database
         self.coll = self.db['scores'] # Access/Initiate Table
-        self.courses = {"Talking Stick - O'odham" : [4,5,4,4,4,3,4,3,4,4,3,4,4,4,4,3,5,4],
-        'Talking Stick - Piipaash' : [4,4,3,4,4,4,5,4,3,4,4,4,3,5,4,5,3,4],
-        'Wildfire - Palmer' : [4,4,5,4,3,4,4,3,5,4,5,4,3,5,3,4,4,4],
-        'Wildfire - Faldo' : [4,4,3,4,4,4,3,4,5,4,5,4,4,3,5,4,3,4],
-        "Whirlwind - Devil's Claw" : [4,4,5,3,4,5,3,4,4,4,4,3,4,3,5,4,5,4],
-        'Whirlwind - Cattail' : [4,5,3,4,4,3,5,4,4,3,4,5,4,4,3,4,5,4]}
+        self.courses = {"Talking Stick - O'odham" : ([4,5,4,4,4,3,4,3,4,4,3,4,4,4,4,3,5,4],[15,13,1,3,11,5,9,17,7,12,6,2,16,8,14,18,4,10]),
+        'Talking Stick - Piipaash' : ([4,4,3,4,4,4,5,4,3,4,4,4,3,5,4,5,3,4], [13,3,7,17,1,15,9,5,11,10,8,2,16,6,4,14,18,12]),
+        'Wildfire - Palmer' : ([4,4,5,4,3,4,4,3,5,4,5,4,3,5,3,4,4,4], [12,8,2,16,18,10,4,14,6,11,5,9,17,1,13,15,3,7]),
+        'Wildfire - Faldo' : ([4,4,3,4,4,4,3,4,5,4,5,4,4,3,5,4,3,4], [7,5,17,1,9,13,15,11,3,8,4,6,16,14,2,12,18,10]),
+        "Whirlwind - Devil's Claw" : ([4,4,5,3,4,5,3,4,4,4,4,3,4,3,5,4,5,4], [11,7,1,13,5,7,9,15,3,16,8,4,14,10,18,12,2,6]),
+        'Whirlwind - Cattail' : ([4,5,3,4,4,3,5,4,4,3,4,5,4,4,3,4,5,4], [9,17,15,1,7,11,3,13,5,8,4,2,10,12,18,14,16,6])}
 
 
     def add_player(self, name, hdcp, skins=True):
@@ -164,7 +186,7 @@ class PlayGolf(object):
         return df
 
 
-    def calc_skins(self, course):
+    def calc_skins(self, course, net=True):
         names = []
         players = []
         docs = self.coll.find()
@@ -177,8 +199,12 @@ class PlayGolf(object):
         cols = [str(x) for x in range(1, 19)]
 
         scores = []
-        for player in players:
-            scores.append(list(player.scores[course].values()))
+        if net:
+            for player in players:
+                scores.append(list(player.net_scores[course].values()))
+        else:
+            for player in players:
+                scores.append(list(player.scores[course].values()))
 
         df = pd.DataFrame(data=scores, index=names, columns=cols)
         low_scores = df.min(axis=0)
@@ -208,12 +234,13 @@ class PlayGolf(object):
 
 
     def player_scorecards(self, players, course):
-        course_par = self.courses[course]
+        course_par, course_hdcps = self.courses[course]
         front_par = sum(course_par[:9])
         back_par = sum(course_par[9:])
         total_par = sum(course_par)
         par = course_par[:9] + [front_par] + course_par[9:] + [back_par, total_par, 0, 0]
-        scores = [par]
+        hdcp = course_hdcps[:9] + [0] + course_hdcps[9:] + [0,0,0,0]
+        scores = [par, hdcp]
 
         for player in players:
             doc = self.coll.find_one({'name': player})
@@ -229,7 +256,7 @@ class PlayGolf(object):
             score = front + [front_tot] + back + [back_tot, total, golfer.hdcp, net_total]
             scores.append(score)
 
-        idx = ['Par'] + players.copy()
+        idx = ['Par', 'Hdcp'] + players.copy()
 
         cols = [str(x) for x in range(1, 19)]
         all_cols = cols[:9] + ['Front'] + cols[9:] + ['Back', 'Total', 'Hdcp', 'Net']
@@ -238,35 +265,38 @@ class PlayGolf(object):
         for col in df.columns:
             df[col] = df[col].astype(str)
         df.loc['Par'] = df.loc['Par'].replace(['0'],'')
+        df.loc['Hdcp'] = df.loc['Hdcp'].replace(['0'],'')
         return df
 
 
 if __name__ == '__main__':
-    past_locations_map()
-    # golf = PlayGolf('2018')
+    # past_locations_map()
+    golf = PlayGolf('2018')
     #
-    # print('Adding players...')
-    # golf.add_player('Stuart', 2, True)
-    # golf.add_player('Alex', 1, True)
-    # golf.add_player('Jerry', 5, True)
-    # golf.add_player('Reggie', 5, True)
-    #
-    # print("Adding Stuart's scores...")
-    # for idx, _ in enumerate(range(18)):
-    #     golf.add_score('Stuart', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
-    #     golf.add_score('Stuart', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
-    #
-    # print("Adding Alex's scores...")
-    # for idx, _ in enumerate(range(18)):
-    #     golf.add_score('Alex', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
-    #     golf.add_score('Alex', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
-    #
-    # print("Adding Jerry's scores...")
-    # for idx, _ in enumerate(range(18)):
-    #     golf.add_score('Jerry', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
-    #     golf.add_score('Jerry', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
-    #
-    # print("Adding Reggie's scores...")
-    # for idx, _ in enumerate(range(18)):
-    #     golf.add_score('Reggie', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
-    #     golf.add_score('Reggie', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
+    print('Adding players...')
+    golf.add_player('Stuart', 2, True)
+    golf.add_player('Alex', 1, True)
+    golf.add_player('Jerry', 5, True)
+    golf.add_player('Reggie', 5, True)
+
+    print("Adding Stuart's scores...")
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Stuart', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
+        golf.add_score('Stuart', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
+
+    print("Adding Alex's scores...")
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Alex', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
+        golf.add_score('Alex', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
+
+    print("Adding Jerry's scores...")
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Jerry', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
+        golf.add_score('Jerry', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
+
+    print("Adding Reggie's scores...")
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Reggie', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
+        golf.add_score('Reggie', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
+
+    # df = golf.player_scorecards(['Stuart'],'Talking Stick - Piipaash')
