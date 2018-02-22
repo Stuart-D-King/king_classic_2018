@@ -113,7 +113,7 @@ class PlayGolf(object):
     def __init__(self, year):
         self.year = year
         self.client = MongoClient()
-        self.client.drop_database('kc_2018')
+        # self.client.drop_database('kc_2018')
         self.db = self.client['kc_{}'.format(year)] # Access/Initiate Database
         self.coll = self.db['scores'] # Access/Initiate Table
         self.courses = {"Talking Stick - O'odham" : ([4,5,4,4,4,3,4,3,4,4,3,4,4,4,4,3,5,4],[15,13,1,3,11,5,9,17,7,12,6,2,16,8,14,18,4,10]),
