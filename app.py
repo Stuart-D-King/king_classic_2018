@@ -52,7 +52,7 @@ def add_player():
         # pdb.set_trace()
         golf.add_player(full_name, hdcp, skins)
         msg = 'Player added successfully'
-        return redirect(url_for('add_player'), msg=msg)
+        return render_template('add_player.html', msg=msg)
 
     return render_template('add_player.html')
 
