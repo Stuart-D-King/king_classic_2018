@@ -116,11 +116,12 @@ input[type=checkbox] {
 }
 
 .paddingClass{
-    margin:10px;
-    padding:5px;
+    margin: 10px;
+    padding: 5px;
 }
 
 .boxed {
-  border: 3px solid;
-  margin: 2px 100px;
+  border: 3px solid #dddddd;
+  margin: 0px auto;
+  padding: 6px;
 }
