@@ -49,7 +49,7 @@ def add_player():
             skins = False
         full_name = f_name.strip() + ' ' + l_name.strip()
         full_name = full_name
-        # pdb.set_trace()
+        
         golf.add_player(full_name, hdcp, skins)
         msg = 'Player added successfully'
         return render_template('add_player.html', msg=msg)
