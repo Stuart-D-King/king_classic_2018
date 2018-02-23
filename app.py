@@ -47,11 +47,12 @@ def add_player():
             skins = True
         else:
             skins = False
-        full_name = f_name + ' ' + l_name
-        full_name = full_name.strip()
-        pdb.set_trace()
+        full_name = f_name.strip() + ' ' + l_name.strip()
+        full_name = full_name
+        # pdb.set_trace()
         golf.add_player(full_name, hdcp, skins)
-        return redirect(url_for('add_player'))
+        msg = 'Player added successfully'
+        return redirect(url_for('add_player'), msg=msg)
 
     return render_template('add_player.html')
 

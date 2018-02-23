@@ -7,6 +7,7 @@ from pymongo import MongoClient
 from collections import defaultdict
 from scipy.stats import rankdata
 import folium
+from bson.binary import Binary
 
 
 def past_locations_map():
