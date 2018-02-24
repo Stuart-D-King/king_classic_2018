@@ -114,7 +114,7 @@ class PlayGolf(object):
     def __init__(self, year):
         self.year = year
         self.client = MongoClient()
-        # self.client.drop_database('kc_2018')
+        self.client.drop_database('kc_2018')
         self.db = self.client['kc_{}'.format(year)] # Access/Initiate Database
         self.coll = self.db['scores'] # Access/Initiate Table
         self.courses = {"Talking Stick - O'odham" : ([4,5,4,4,4,3,4,3,4,4,3,4,4,4,4,3,5,4],[15,13,1,3,11,5,9,17,7,12,6,2,16,8,14,18,4,10]),
@@ -180,7 +180,6 @@ class PlayGolf(object):
         results = list(zip(rank, names, scores))
         sorted_results = sorted(results, key=lambda x: x[0])
 
-
         df = pd.DataFrame(sorted_results, columns=['Position', 'Name', 'Net Total'])
         # df.set_index('Position', inplace=True)
 
@@ -196,7 +195,7 @@ class PlayGolf(object):
                 names.append(doc['name'])
                 players.append(pickle.loads(doc['player']))
 
-        pot = len(names) * 10
+        pot = len(names) * 5
         cols = [str(x) for x in range(1, 19)]
 
         scores = []
@@ -211,6 +210,8 @@ class PlayGolf(object):
         low_scores = df.min(axis=0)
         skins = []
         for hole, low_score in zip(range(1, 19), low_scores):
+            if low_score == 0:
+                continue
             scores = list(df[str(hole)].values)
             if scores.count(low_score) == 1:
                 skins.append(df[str(hole)].idxmin())
@@ -327,12 +328,14 @@ class PlayGolf(object):
 if __name__ == '__main__':
     # past_locations_map()
     golf = PlayGolf('2018')
-    #
+
     print('Adding players...')
     golf.add_player('Stuart', 2, True)
     golf.add_player('Alex', 1, True)
     golf.add_player('Jerry', 5, True)
     golf.add_player('Reggie', 5, True)
+    golf.add_player('Pete', 10, True)
+    golf.add_player('Ben', 15, True)
 
     print("Adding Stuart's scores...")
     for idx, _ in enumerate(range(18)):
@@ -353,5 +356,18 @@ if __name__ == '__main__':
     for idx, _ in enumerate(range(18)):
         golf.add_score('Reggie', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
         golf.add_score('Reggie', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
+
+    print("Adding Pete's scores...")
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Pete', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
+        golf.add_score('Pete', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
+
+    print("Adding Ben's scores...")
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Ben', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
+        golf.add_score('Ben', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
+
+    # teams = [('Stuart', 'Jerry'), ('Alex', 'Reggie'), ('Pete', 'Ben')]
+    # df = golf.calc_teams(teams, 'Talking Stick - Piipaash')
 
     # df = golf.player_scorecards(['Stuart'],'Talking Stick - Piipaash')

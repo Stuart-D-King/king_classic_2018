@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>King Classic: Teams</title>
+		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+		<meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+	</head>
+	<body>
+    <h2>Teams</h2>
+    <form action='/teams' method='POST' id='submitform'>
+      Course:<br>
+      <select name="course">
+				<option selected value="None" readonly="readonly">-- select course --</option>
+        <option value="Talking Stick - O'odham">Talking Stick - O'odham</option>
+        <option value="Talking Stick - Piipaash">Talking Stick - Piipaash</option>
+        <option value="Wildfire - Palmer">Wildfire - Palmer</option>
+        <option value="Wildfire - Faldo">Wildfire - Faldo</option>
+        <option value="Whirlwind - Devil's Claw">Whirlwind - Devil's Claw</option>
+        <option value="Whirlwind - Cattail">Whirlwind - Cattail</option>
+      </select>
+
+			<br><br>
+
+			<table>
+        <tr>
+					<td colspan='2'><b>Team 1</b></td>
+          <td colspan='2'><b>Team 2</b></td>
+        </tr>
+				<tr>
+	        <td>Player 1:</td>
+	        <td>
+						<select name="t1p1" method="GET" action="/">
+							<option selected value="None" readonly="readonly">-- select player --</option>
+							{% for player in players %}
+			        <option value="{{player}}">{{player}}</option>"
+			        {% endfor %}
+			      </select>
+	        </td>
+	        <td>Player 1:</td>
+	        <td>
+            <select name="t2p1" method="GET" action="/">
+							<option selected value="None" readonly="readonly">-- select player --</option>
+							{% for player in players %}
+			        <option value="{{player}}">{{player}}</option>"
+			        {% endfor %}
+			      </select>
+	        </td>
+        </tr>
+        <tr>
+          <td>Player 2:</td>
+          <td>
+            <select name="t1p2" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+          <td>Player 2:</td>
+          <td>
+            <select name="t2p2" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+			</table>
+
+			<br>
+
+      <table>
+        <tr>
+          <td colspan='2'><b>Team 3</b></td>
+          <td colspan='2'><b>Team 4</b></td>
+        </tr>
+        <tr>
+          <td>Player 1:</td>
+          <td>
+            <select name="t3p1" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+          <td>Player 1:</td>
+          <td>
+            <select name="t4p1" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Player 2:</td>
+          <td>
+            <select name="t3p2" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+          <td>Player 2:</td>
+          <td>
+            <select name="t4p2" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+      </table>
+
+      <br>
+
+      <table>
+        <tr>
+          <td colspan='2'><b>Team 5</b></td>
+          <td colspan='2'><b>Team 6</b></td>
+        </tr>
+        <tr>
+          <td>Player 1:</td>
+          <td>
+            <select name="t5p1" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+          <td>Player 1:</td>
+          <td>
+            <select name="t6p1" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Player 2:</td>
+          <td>
+            <select name="t5p2" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+          <td>Player 2:</td>
+          <td>
+            <select name="t6p2" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+      </table>
+
+      <br>
+
+      <table>
+        <tr>
+          <td colspan='2'><b>Team 7</b></td>
+          <td colspan='2'><b>Team 8</b></td>
+        </tr>
+        <tr>
+          <td>Player 1:</td>
+          <td>
+            <select name="t7p1" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+          <td>Player 1:</td>
+          <td>
+            <select name="t8p1" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Player 2:</td>
+          <td>
+            <select name="t7p2" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+          <td>Player 2:</td>
+          <td>
+            <select name="t8p2" method="GET" action="/">
+              <option selected value="None" readonly="readonly">-- select player --</option>
+              {% for player in players %}
+              <option value="{{player}}">{{player}}</option>"
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+      </table>
+
+			<br>
+
+      <input type='submit' value="Submit"/>
+    </form>
+		<h4>{{msg|safe}}</h4>
+		<h4>{{course|safe}}</h4>
+		<p>{{teams_df|safe}}</p>
+    <h4><a href="{{ url_for('index') }}">Home</a></h4>
+  </body>
+</html>

@@ -49,7 +49,7 @@ def add_player():
             skins = False
         full_name = f_name.strip() + ' ' + l_name.strip()
         full_name = full_name
-        
+
         golf.add_player(full_name, hdcp, skins)
         msg = 'Player added successfully'
         return render_template('add_player.html', msg=msg)
@@ -114,16 +114,16 @@ def skins():
         try:
             course = request.form['skins_course']
             if course == 'None':
-                error_msg = 'Please select a course'
-                return render_template('skins.html', error_msg=error_msg)
+                msg = 'Please select a course.'
+                return render_template('skins.html', msg=msg)
             # pdb.set_trace()
             skins_df = golf.calc_skins(course)
 
-            return render_template('skins.html', skins_df=skins_df.to_html(index=False), c=course)
+            return render_template('skins.html', skins_df=skins_df.to_html(index=False), course=course)
 
         except:
-            no_skins_msg = 'No skins were won'
-            return render_template('skins.html', no_skins_msg=no_skins_msg)
+            msg = 'No skins were won.'
+            return render_template('skins.html', msg=msg)
 
     return render_template('skins.html')
 
@@ -136,7 +136,7 @@ def scorecard():
     if request.method == 'POST':
         course = request.form['scorecard_course']
         if course == 'None':
-            msg = 'Please select a course'
+            msg = 'Please select a course.'
             return render_template('scorecard.html', players=players, msg=msg)
 
         golfers = request.form.getlist('golfers')
@@ -147,9 +147,52 @@ def scorecard():
 
 
 # teams page
-@app.route('/team_standings', methods=['GET', 'POST'])
-def team_standings():
-    return render_template('team_standings.html')
+@app.route('/teams', methods=['GET', 'POST'])
+def teams():
+    players = golf.coll.distinct('name')
+    players.sort()
+    if request.method == 'POST':
+        course = request.form['course']
+        if course == 'None':
+            msg = 'Please select a course.'
+            return render_template('teams.html', players=players, msg=msg)
+
+        p1 = [request.form['t1p1'],
+                request.form['t2p1'],
+                request.form['t3p1'],
+                request.form['t4p1'],
+                request.form['t5p1'],
+                request.form['t6p1'],
+                request.form['t7p1'],
+                request.form['t8p1']]
+
+        p2 = [request.form['t1p2'],
+                request.form['t2p2'],
+                request.form['t3p2'],
+                request.form['t4p2'],
+                request.form['t5p2'],
+                request.form['t6p2'],
+                request.form['t7p2'],
+                request.form['t8p2']]
+
+        p1 = [golfer for golfer in p1 if golfer != 'None']
+        p2 = [golfer for golfer in p2 if golfer != 'None']
+
+        if len(p1) != len(p2):
+            msg = 'Teams not properly defined. Please try again.'
+            return render_template('teams.html', players=players, msg=msg)
+
+        flat = p1 + p2
+        if len([x for x, count in Counter(flat).items() if count > 1]) >= 1:
+            msg = 'The same golfer was selected twice. Please try again.'
+            return render_template('teams.html', players=players, msg=msg)
+
+        golfers = list(zip(p1,p2))
+        teams_df = golf.calc_teams(golfers, course)
+        return render_template('teams.html', players=players, teams_df=teams_df.to_html(index=False), course=course)
+
+
+    return render_template('teams.html', players=players)
 
 
 if __name__ == '__main__':
