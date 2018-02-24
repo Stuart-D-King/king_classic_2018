@@ -234,6 +234,60 @@ class PlayGolf(object):
         return df
 
 
+    def calc_teams(self, teams, course):
+        # pot = len(teams) * 20
+        team_scores = []
+        for (p1, p2) in teams:
+            doc1 = self.coll.find_one({'name': p1})
+            doc2 = self.coll.find_one({'name': p2})
+            g1 = pickle.loads(doc1['player'])
+            g2 = pickle.loads(doc2['player'])
+            s1 = g1.calc_course_score(course, net=True)
+            s2 = g2.calc_course_score(course, net=True)
+            team_score = s1 + s2
+            team_scores.append(team_score)
+
+        team_nums = [idx+1 for idx, _ in enumerate(range(len(teams)))]
+        rank = list(rankdata(team_scores, method='min'))
+        results = list(zip(rank, team_nums, team_scores))
+        sorted_results = sorted(results, key=lambda x: x[0])
+
+        clean_teams = [p1 + ' / ' + p2 for p1, p2 in teams]
+        final_results = [(r, clean_teams[i-1], s) for r,i,s in sorted_results]
+
+        df = pd.DataFrame(final_results, columns=['Position', 'Team', 'Score'])
+        df['Winnings'] = 0
+
+        first = [t for r,t,s in final_results if r == 1]
+        second = [t for r,t,s in final_results if r == 2]
+        third = [t for r,t,s in final_results if r == 3]
+
+        if len(first) == 1 and len(second) == 1:
+            f_winnings = 80
+            s_winnings = 50
+            t_winnings = 30 / len(third)
+            df['Winnings'] = np.where(df['Position'] == 1, f_winnings, df['Winnings'])
+            df['Winnings'] = np.where(df['Position'] == 2, s_winnings, df['Winnings'])
+            df['Winnings'] = np.where(df['Position'] == 3, t_winnings, df['Winnings'])
+        elif len(first) == 2:
+            f_winnings = (80 + 50) / 2
+            s_winnings = 30 / len(second)
+            df['Winnings'] = np.where(df['Position'] == 1, f_winnings, df['Winnings'])
+            df['Winnings'] = np.where(df['Position'] == 2, s_winnings, df['Winnings'])
+        elif len(first) == 1  and len(second) > 1:
+            f_winnings = 80
+            s_winnings = (50 + 30) / len(second)
+            df['Winnings'] = np.where(df['Position'] == 1, f_winnings, df['Winnings'])
+            df['Winnings'] = np.where(df['Position'] == 2, s_winnings, df['Winnings'])
+        elif len(first) > 2:
+            f_winnings = (80 + 50 + 30) / len(first)
+            df['Winnings'] = np.where(df['Position'] == 1, f_winnings, df['Winnings'])
+
+        df['Winnings'] = df['Winnings'].map('${:,.2f}'.format)
+
+        return df
+
+
     def player_scorecards(self, players, course):
         course_par, course_hdcps = self.courses[course]
         front_par = sum(course_par[:9])
