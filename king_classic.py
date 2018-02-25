@@ -154,11 +154,6 @@ class PlayGolf(object):
         return total_score
 
 
-    def show_team_score(self, team, course):
-        team_score = team.calc_team_score(course)
-        return 'Team: {}, Score: {}'.format(team.keys())
-
-
     def leaderboard(self, net=True):
         names = []
         players = []
@@ -208,31 +203,37 @@ class PlayGolf(object):
 
         df = pd.DataFrame(data=scores, index=names, columns=cols)
         low_scores = df.min(axis=0)
-        skins = []
+        # skins = []
+        skins_dct = defaultdict(list)
         for hole, low_score in zip(range(1, 19), low_scores):
             if low_score == 0:
                 continue
             scores = list(df[str(hole)].values)
             if scores.count(low_score) == 1:
-                skins.append(df[str(hole)].idxmin())
+                # skins.append((hole, df[str(hole)].idxmin()))
+                skins_dct[df[str(hole)].idxmin()].append(str(hole))
 
         results = []
         for name in names:
-            results.append((name, skins.count(name)))
+            results.append((name, skins_dct[name], len(skins_dct[name])))
+            # results.append((name, skins.count(name)))
 
-        sorted_results = sorted(results, key=lambda x: x[1], reverse=True)
+        results = [(name, ', '.join(holes), n_skins) for name, holes, n_skins in results]
+        sorted_results = sorted(results, key=lambda x: x[2], reverse=True)
 
-        total_skins = sum(n for _, n in sorted_results)
+        total_skins = sum(n for _, _, n in sorted_results)
         skin_value = pot / total_skins
 
-        final_results = [(name, skins * skin_value) for name, skins in sorted_results]
+        final_results = [(name, holes, skins * skin_value) for name, holes, skins in sorted_results]
 
-        df_results = [(name, int(winnings/skin_value), float(winnings)) for name, winnings in final_results]
+        df_results = [(name, holes, int(winnings/skin_value), float(winnings)) for name, holes, winnings in final_results]
 
-        df = pd.DataFrame(df_results, columns=['Player', 'Skins', 'Winnings'])
-        df['Winnings'] = df['Winnings'].map('${:,.2f}'.format)
+        df_skins = pd.DataFrame(df_results, columns=['Player', 'Holes Won', 'Skins', 'Winnings'])
+        df_skins['Winnings'] = df_skins['Winnings'].map('${:,.2f}'.format)
 
-        return df
+        # df_scorecard = self.player_scorecards(players, course)
+
+        return df_skins
 
 
     def calc_teams(self, teams, course):
@@ -336,6 +337,8 @@ if __name__ == '__main__':
     golf.add_player('Reggie', 5, True)
     golf.add_player('Pete', 10, True)
     golf.add_player('Ben', 15, True)
+    golf.add_player('Andy', 6, True)
+    golf.add_player('Josh', 9, True)
 
     print("Adding Stuart's scores...")
     for idx, _ in enumerate(range(18)):
@@ -366,6 +369,18 @@ if __name__ == '__main__':
     for idx, _ in enumerate(range(18)):
         golf.add_score('Ben', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
         golf.add_score('Ben', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
+
+    print("Adding Andy's scores...")
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Andy', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
+        golf.add_score('Andy', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
+
+    print("Adding Josh's scores...")
+    for idx, _ in enumerate(range(18)):
+        golf.add_score('Josh', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
+        golf.add_score('Josh', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
+
+    # df = golf.calc_skins('Talking Stick - Piipaash')
 
     # teams = [('Stuart', 'Jerry'), ('Alex', 'Reggie'), ('Pete', 'Ben')]
     # df = golf.calc_teams(teams, 'Talking Stick - Piipaash')

@@ -116,10 +116,12 @@ def skins():
             if course == 'None':
                 msg = 'Please select a course.'
                 return render_template('skins.html', msg=msg)
-            # pdb.set_trace()
-            skins_df = golf.calc_skins(course)
 
-            return render_template('skins.html', skins_df=skins_df.to_html(index=False), course=course)
+            skins_df = golf.calc_skins(course)
+            golfers = skins_df['Player'].tolist()
+            scorecard_df = golf.player_scorecards(golfers, course)
+
+            return render_template('skins.html', skins_df=skins_df.to_html(index=False), scorecard_df=scorecard_df.to_html(), course=course)
 
         except:
             msg = 'No skins were won.'

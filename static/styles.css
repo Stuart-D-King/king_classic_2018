@@ -68,7 +68,7 @@ fieldset {
     border: 0;
     display: inline-block;
     text-align: left;
-    width: 200px;
+    width: auto;
 }
 
 select{
