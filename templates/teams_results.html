@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>King Classic: Teams Results</title>
+		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+		<meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+	</head>
+  <body>
+    <h4>{{course|safe}}</h4>
+    <p>{{teams_df|safe}}</p>
+    <h4><a href="{{ url_for('teams') }}">Back to Teams</a></h4>
+    <h4><a href="{{ url_for('index') }}">Home</a></h4>
+  </body>
+</html>

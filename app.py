@@ -121,7 +121,7 @@ def skins():
             golfers = skins_df['Player'].tolist()
             scorecard_df = golf.player_scorecards(golfers, course)
 
-            return render_template('skins.html', skins_df=skins_df.to_html(index=False), scorecard_df=scorecard_df.to_html(), course=course)
+            return render_template('skins_results.html', skins_df=skins_df.to_html(index=False), scorecard_df=scorecard_df.to_html(), course=course)
 
         except:
             msg = 'No skins were won.'
@@ -143,7 +143,7 @@ def scorecard():
 
         golfers = request.form.getlist('golfers')
         scorecard_df = golf.player_scorecards(golfers, course)
-        return render_template('scorecard.html', players=players, scorecard_df=scorecard_df.to_html(), course=course)
+        return render_template('scorecard_results.html', scorecard_df=scorecard_df.to_html(), course=course)
 
     return render_template('scorecard.html', players=players)
 
@@ -191,8 +191,7 @@ def teams():
 
         golfers = list(zip(p1,p2))
         teams_df = golf.calc_teams(golfers, course)
-        return render_template('teams.html', players=players, teams_df=teams_df.to_html(index=False), course=course)
-
+        return render_template('teams_results.html', teams_df=teams_df.to_html(index=False), course=course)
 
     return render_template('teams.html', players=players)
 
