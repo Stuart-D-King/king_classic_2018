@@ -622,7 +622,7 @@ if __name__ == '__main__':
     for idx, _ in enumerate(range(18)):
         golf.add_score('Andy Tapper', "Talking Stick - O'odham", idx+1, np.random.randint(4,7))
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Andy', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,7))
+        golf.add_score('Andy Tapper', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,7))
 
     print("Adding Josh's scores...")
     for idx, _ in enumerate(range(18)):
