@@ -3,7 +3,6 @@ import numpy as np
 import sys
 import pickle
 import pdb
-from pymongo import MongoClient
 from collections import defaultdict
 from scipy.stats import rankdata
 import folium
