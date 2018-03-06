@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-from pymongo import MongoClient
-# from king_classic import PlayGolf, Player
 from king_classic_pkling import PlayGolf, Player
 from flask import Flask, request, redirect, url_for, render_template
 from collections import Counter
