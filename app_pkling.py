@@ -54,7 +54,7 @@ def add_player():
 
         golf.add_player(full_name, hdcp, skins)
         msg = 'Player added successfully'
-        return redirect(url_for('add_player'))
+        return render_template('add_player.html', msg=msg)
 
     return render_template('add_player.html')
 
