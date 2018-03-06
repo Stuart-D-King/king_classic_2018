@@ -12,10 +12,12 @@
     <h2>General Information</h2>
     <p><a href="#payment">Payment</a></p>
     <p><a href="#lodging">Lodging</a></p>
+		<p><a href="#food">Food</a></p>
     <p><a href="#rules">Rules & Format</a></p>
     <p><a href="#golf">Courses, Pairings, & Tee Times</a></p>
     <p><a href="#sidegames">Side Games</a></p>
     <p><a href="#teams">Teams</a></p>
+		<p><a href="{{ url_for('index') }}">Home</a></p>
     <br>
     <section id="payment">
       <h4>Payment</h4>
@@ -50,19 +52,19 @@
 					<tr>
 						<td>Ben Donahue</td>
 						<td>Bobby Jovanov</td>
-						<td>Zach Taylor</td>
+						<td>Rob Matiko</td>
 						<td>Jeff Veness</td>
 					</tr>
 					<tr>
 						<td>Mathias Jackson</td>
 						<td>Josh Duckett</td>
-						<td>Chet Cheek</td>
+						<td>Zach Taylor</td>
 						<td>Jerry King</td>
 					</tr>
 					<tr>
-						<td>Stuart King</td>
-						<td>Andy Tapper</td>
 						<td>Justin Casson</td>
+						<td>Andy Tapper</td>
+						<td>Stuart King</td>
 						<td>Reggie Sherrill</td>
 					</tr>
 				</table>
@@ -72,11 +74,27 @@
 		<a href="#">Back to top</a>
     <br>
 		<br>
+		<section id="food">
+			<h4>Food</h4>
+			<div class="boxed">
+				<p>Breakfast is included with our lodging. We're not sure how good it will be, but it's "free"! We'll get lunch at the course as a group after each round.</p>
+				<p>For dinners, we've made reservations at the following three restaurants.</p>
+				<p>Wednesday: TBD</p>
+	      <p>Thursday: TBD</p>
+	      <p>Friday: TBD</p>
+			</div>
+		</section>
+		<br>
+		<a href="#">Back to top</a>
+    <br>
+		<br>
     <section id="rules">
       <h4>Rules & Format</h4>
 			<div class="boxed">
-	      <p>The highest score you can card is +5 on a hole. Everything outside of the leather must be putted. Play everything as a lateral, including hazards marked as OB. You are permitted to bump the ball from a divot in the fairway, but play everything else down.</p>
+	      <p>The highest score you can card is +5 on a hole. Putt everything out, and play everything as a lateral, including hazards marked as OB. You are permitted to bump the ball from a divot in the fairway, but play everything else down.</p>
 	      <p>You must play all six rounds to be eligible to win the King Classic and have your name on the trophy. The winner will have the lowest <b>net score</b> over six rounds.</p>
+				<p>Initial handicaps must be verified, but do not need to be official. There are several free apps that will calculate a handicap for you. <a href="https://www.thegrint.com/" target="_blank">The Grint</a> and <a href="https://www.swingbyswing.com/" target="_blank">Swing by Swing</a> are a few good ones.</p>
+				<p>During the trip, if you better your handicap by four or more on any two consecutive rounds, your handicap will be adjusted down by two. For example, if your handicap is 12 and you shoot 80 or better two times in a row, your handicap will adjusted to 10. Similarly, if you miss your handicap by eight or more on two consecutive rounds, your handicap will be adjusted up by two. For example, if your handicap is 12 and you shoot 92 or worse two times in a row, your handicap will be adjusted to 14. You can check what your handicap will be before each round <a href="{{ url_for('handicaps') }}">here</a>.</p>
 			</div>
     </section>
 		<br>
@@ -96,7 +114,7 @@
 	      <p><b>Talking Stick Golf Club - O'odham Course</b></p>
 	      <p>Wednesday, May 16</p>
 	      <p>Under 50: Black Tees</p>
-	      <p>Over 50: Gold Tees</p>
+	      <p>Over 50 or 15+ Hdcp: Gold Tees</p>
 	      <p>Closest to the Pin: Hole #16</p>
 			</section>
 			<div>
@@ -147,7 +165,7 @@
 				<p><b>Talking Stick Golf Club - Piipaash Course</b></p>
 	      <p>Wednesday, May 16</p>
 	      <p>Under 50: Black Tees</p>
-	      <p>Over 50: Gold Tees</p>
+	      <p>Over 50 or 15+ Hdcp: Gold Tees</p>
 	      <p>Closest to the Pin: Hole #13</p>
 			</section>
 			<div>
@@ -198,7 +216,7 @@
 				<p><b>Wildfire Golf Club - Palmer Signature Course</b></p>
 	      <p>Thursday, May 17</p>
 	      <p>Under 50: Tournament Tees</p>
-	      <p>Over 50: Championship Tees</p>
+	      <p>Over 50 or 15+ Hdcp: Championship Tees</p>
 	      <p>Closest to the Pin: Hole #13</p>
 			</section>
 			<div>
@@ -249,7 +267,7 @@
 				<p><b>Wildfire Golf Club - Faldo Championship Course</b></p>
 	      <p>Thursday, May 17</p>
 	      <p>Under 50: Tournament</p>
-	      <p>Over 50: Championship</p>
+	      <p>Over 50 or 15+ Hdcp: Championship</p>
 	      <p>Closest to the Pin: Hole #3</p>
 			</section>
 			<div>
@@ -300,7 +318,7 @@
 	      <p><b>Whirlwind Golf Club - Devil's Claw</b></p>
 	      <p>Friday, May 18</p>
 	      <p>Under 50: Black Tees</p>
-	      <p>Over 50: Gold Tees</p>
+	      <p>Over 50 or 15+ Hdcp: Gold Tees</p>
 	      <p>Closest to the Pint: Hole #14</p>
 			</section>
 			<div>
@@ -351,7 +369,7 @@
 	      <p><b>Whirlwind Golf Club - Cattail Course</b></p>
 	      <p>Friday, May 18</p>
 	      <p>Under 50: Gold Tees</p>
-	      <p>Over 50: Silver Tees</p>
+	      <p>Over 50 or 15+ Hdcp: Silver Tees</p>
 	      <p>Closest to the Pin: Hole #6</p>
 			</section>
 			<div>
@@ -404,7 +422,7 @@
 			<div class="boxed">
 	      <p>You have the opportunity to join a <b>skins game</b> (based on net low score), which is $5 per round and then split among the participants based on the number of skins won.</p>
 	      <p><b>Closest to the pin</b> is $5 per round. The hole has been pre-selected and is identified above.</p>
-	      <p>There is no obligation to be in either side game, but if you are joining, Alex is the bank, so settle up with him.</p>
+	      <p>There is no obligation to be in either side game, but if you are joining, Alex is the bank, so settle up with him. If you you don't already have it, download and install <a href="https://venmo.com/" target="_blank">Venmo</a> to make money exchange quick and easy.</p>
 			</div>
     </section>
 		<br>

@@ -7,6 +7,8 @@ from pymongo import MongoClient
 from collections import defaultdict
 from scipy.stats import rankdata
 import folium
+from os import listdir, makedirs
+from os.path import isfile, join, exists
 
 
 def past_locations_map():
@@ -117,65 +119,67 @@ class Player(object):
 
 class PlayGolf(object):
 
-    def __init__(self, year):
-        self.year = year
-        self.client = MongoClient()
-        # self.client.drop_database('kc_2018')
-        self.db = self.client['kc_{}'.format(year)] # Access/Initiate Database
-        self.coll = self.db['scores'] # Access/Initiate Table
+    def __init__(self):
         self.courses = {"Talking Stick - O'odham" : ([4,5,4,4,4,3,4,3,4,4,3,4,4,4,4,3,5,4],[15,13,1,3,11,5,9,17,7,12,6,2,16,8,14,18,4,10]),
         'Talking Stick - Piipaash' : ([4,4,3,4,4,4,5,4,3,4,4,4,3,5,4,5,3,4], [13,3,7,17,1,15,9,5,11,10,8,2,16,6,4,14,18,12]),
         'Wildfire - Palmer' : ([4,4,5,4,3,4,4,3,5,4,5,4,3,5,3,4,4,4], [12,8,2,16,18,10,4,14,6,11,5,9,17,1,13,15,3,7]),
         'Wildfire - Faldo' : ([4,4,3,4,4,4,3,4,5,4,5,4,4,3,5,4,3,4], [7,5,17,1,9,13,15,11,3,8,4,6,16,14,2,12,18,10]),
         "Whirlwind - Devil's Claw" : ([4,4,5,3,4,5,3,4,4,4,4,3,4,3,5,4,5,4], [11,7,1,13,5,7,9,15,3,16,8,4,14,10,18,12,2,6]),
         'Whirlwind - Cattail' : ([4,5,3,4,4,3,5,4,4,3,4,5,4,4,3,4,5,4], [9,17,15,1,7,11,3,13,5,8,4,2,10,12,18,14,16,6])}
+        self.pkl_path = 'pkl_files/'
 
 
     def add_player(self, name, hdcp, skins=True):
-        golfer = Player(name, hdcp, self.courses, skins)
-        golfer_pkl = pickle.dumps(golfer)
-        self.coll.update_one({'name': name}, {'$set': {'name': name, 'player': golfer_pkl, 'skins': skins, 'hdcp': hdcp}}, upsert=True)
+        if not exists(self.pkl_path):
+            makedirs(self.pkl_path)
+
+        if not isfile(self.pkl_path + name.strip().lower().replace(' ','_')):
+            golfer = Player(name, hdcp, self.courses, skins)
+            with open('{}{}.pkl'.format(self.pkl_path, name.strip().lower().replace(' ','_')), 'wb') as f:
+                pickle.dump(golfer, f)
 
 
     def add_score(self, player, course, hole, score):
-        doc = self.coll.find_one({'name': player})
-        golfer = pickle.loads(doc['player'])
         hdcp = self.calc_handicap(player, course)
-        # print('{}, {}, {}, {}, {}'.format(player, course, hdcp, hole, score))
+        with open('{}{}.pkl'.format(self.pkl_path, player.strip().lower().replace(' ','_')), 'rb') as f:
+            golfer = pickle.load(f)
+
         golfer.post_score(course, hole, score, hdcp)
 
-        golfer_pkl = pickle.dumps(golfer)
-        self.coll.update_one({'name': player}, {'$set': {'player': golfer_pkl}})
+        with open('{}{}.pkl'.format(self.pkl_path, player.strip().lower().replace(' ','_')), 'wb') as f:
+            pickle.dump(golfer, f)
 
 
     def show_player_course_score(self, player, course, net=False):
-        doc = self.coll.find_one({'name': player})
-        golfer = pickle.loads(doc['player'])
+        with open('{}{}.pkl'.format(self.pkl_path, player.strip().lower().replace(' ','_')), 'rb') as f:
+            golfer = pickle.load(f)
         score = golfer.calc_course_score(course, net)
         return score
 
 
     def show_player_total_score(self, player, net=False):
-        doc = self.coll.find_one({'name': player})
-        golfer = pickle.loads(doc['player'])
+        with open('{}{}.pkl'.format(self.pkl_path, player.strip().lower().replace(' ','_')), 'rb') as f:
+            golfer = pickle.load(f)
         total_score = golfer.calc_total_score(net)
         return total_score
 
 
     def leaderboard(self, net=True):
-        names = []
-        players = []
-        docs = self.coll.find()
-        for doc in docs:
-            names.append(doc['name'])
-            players.append(pickle.loads(doc['player']))
+        allfiles = [f for f in listdir(self.pkl_path) if isfile(join(self.pkl_path, f))]
 
+        golfers = []
+        for pf in allfiles:
+            with open('{}'.format(self.pkl_path) + pf, 'rb') as f:
+                golfers.append(pickle.load(f))
+
+        names = []
         scores = []
-        for player in players:
+        for golfer in golfers:
+            names.append(golfer.name)
             total = 0
-            for course in player.scores.keys():
-                if player.calc_course_score(course, net) > 0:
-                    total += player.calc_course_score(course, net)
+            for course in golfer.scores.keys():
+                if golfer.calc_course_score(course, net) > 0:
+                    total += golfer.calc_course_score(course, net)
             scores.append(total)
 
         rank = list(rankdata(scores, method='min'))
@@ -190,13 +194,14 @@ class PlayGolf(object):
 
 
     def calc_skins(self, course, net=True):
-        names = []
-        players = []
-        docs = self.coll.find()
-        for doc in docs:
-            if doc['skins'] == True:
-                names.append(doc['name'])
-                players.append(pickle.loads(doc['player']))
+        allfiles = [f for f in listdir(self.pkl_path) if isfile(join(self.pkl_path, f))]
+        golfers = []
+        for pf in allfiles:
+            with open('{}'.format(self.pkl_path) + pf, 'rb') as f:
+                golfers.append(pickle.load(f))
+
+        players = [golfer for golfer in golfers if golfer.skins == True]
+        names = [golfer.name for golfer in golfers]
 
         pot = len(names) * 5
         cols = [str(x) for x in range(1, 19)]
@@ -243,13 +248,19 @@ class PlayGolf(object):
 
 
     def calc_teams(self, teams, course):
+        allfiles = [f for f in listdir(self.pkl_path) if isfile(join(self.pkl_path, f))]
+        golfers = []
+        for pf in allfiles:
+            with open('{}'.format(self.pkl_path) + pf, 'rb') as f:
+                golfers.append(pickle.load(f))
+
+        names = [golfer.name for golfer in golfers]
+        dct = dict(zip(names, golfers))
         # pot = len(teams) * 20
         team_scores = []
         for (p1, p2) in teams:
-            doc1 = self.coll.find_one({'name': p1})
-            doc2 = self.coll.find_one({'name': p2})
-            g1 = pickle.loads(doc1['player'])
-            g2 = pickle.loads(doc2['player'])
+            g1 = dct[p1]
+            g2 = dct[p2]
             s1 = g1.calc_course_score(course, net=True)
             s2 = g2.calc_course_score(course, net=True)
             team_score = s1 + s2
@@ -305,9 +316,17 @@ class PlayGolf(object):
         hdcp = course_hdcps[:9] + [0] + course_hdcps[9:] + [0,0,0,0]
         scores = [par, hdcp]
 
+        allfiles = [f for f in listdir(self.pkl_path) if isfile(join(self.pkl_path, f))]
+        golfers = []
+        for pf in allfiles:
+            with open('{}'.format(self.pkl_path) + pf, 'rb') as f:
+                golfers.append(pickle.load(f))
+
+        names = [golfer.name for golfer in golfers]
+        dct = dict(zip(names, golfers))
+
         for player in players:
-            doc = self.coll.find_one({'name': player})
-            golfer = pickle.loads(doc['player'])
+            golfer = dct[player]
 
             front = golfer.front_nine(course)
             front_tot = sum(front)
@@ -334,9 +353,16 @@ class PlayGolf(object):
 
 
     def calc_handicap(self, player, course):
-        doc = self.coll.find_one({'name': player})
-        golfer = pickle.loads(doc['player'])
+        allfiles = [f for f in listdir(self.pkl_path) if isfile(join(self.pkl_path, f))]
+        golfers = []
+        for pf in allfiles:
+            with open('{}'.format(self.pkl_path) + pf, 'rb') as f:
+                golfers.append(pickle.load(f))
 
+        names = [golfer.name for golfer in golfers]
+        dct = dict(zip(names, golfers))
+
+        golfer = dct[player]
         if course == 'Wildfire - Palmer':
             check_a = []
             check_b = []
@@ -347,6 +373,7 @@ class PlayGolf(object):
                     check_b.append(golfer.calc_course_score(c) - (sum(c_par) + golfer.hdcp) >= 8)
                 else:
                     return golfer.hdcp
+
             if sum(check_a) == 2:
                 return golfer.hdcp - 2
             elif sum(check_b) == 2:
@@ -516,12 +543,13 @@ class PlayGolf(object):
 
 
     def show_handicaps(self, course):
-        names = []
-        # golfers = []
-        docs = self.coll.find()
-        for doc in docs:
-            names.append(doc['name'])
-            # golfers.append(pickle.loads(doc['player']))
+        allfiles = [f for f in listdir(self.pkl_path) if isfile(join(self.pkl_path, f))]
+        golfers = []
+        for pf in allfiles:
+            with open('{}'.format(self.pkl_path) + pf, 'rb') as f:
+                golfers.append(pickle.load(f))
+
+        names = [golfer.name for golfer in golfers]
 
         hdcps = [self.calc_handicap(name, course) for name in names]
         results = list(zip(names, hdcps))
@@ -534,7 +562,7 @@ class PlayGolf(object):
 
 if __name__ == '__main__':
     # past_locations_map()
-    golf = PlayGolf('2018')
+    golf = PlayGolf()
 
     print('Adding players...')
     golf.add_player('Stuart', 2, True)

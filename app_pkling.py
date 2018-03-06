@@ -1,15 +1,18 @@
 import numpy as np
 import pandas as pd
 from pymongo import MongoClient
-from king_classic import PlayGolf, Player
-# from king_classic_pkling import PlayGolf, Player
+# from king_classic import PlayGolf, Player
+from king_classic_pkling import PlayGolf, Player
 from flask import Flask, request, redirect, url_for, render_template
 from collections import Counter
+from os import listdir
+from os.path import isfile, join
+import pickle
 import pdb
 
 
 app = Flask(__name__)
-golf = PlayGolf('2018')
+golf = PlayGolf()
 
 
 # home page
@@ -61,8 +64,15 @@ def add_player():
 # enter scores page
 @app.route('/enter_scores', methods=['GET', 'POST'])
 def enter_scores():
-    players = golf.coll.distinct('name')
+    allfiles = [f for f in listdir(golf.pkl_path) if isfile(join(golf.pkl_path, f))]
+    golfers = []
+    for pf in allfiles:
+        with open('{}'.format(golf.pkl_path) + pf, 'rb') as f:
+            golfers.append(pickle.load(f))
+
+    players = [golfer.name for golfer in golfers]
     players.sort()
+
     holes = [x for x in range(1,19)]
     scores = [x for x in range(1,11)]
 
@@ -133,8 +143,15 @@ def skins():
 # scorecard page
 @app.route('/scorecard', methods=['GET', 'POST'])
 def scorecard():
-    players = golf.coll.distinct('name')
+    allfiles = [f for f in listdir(golf.pkl_path) if isfile(join(golf.pkl_path, f))]
+    golfers = []
+    for pf in allfiles:
+        with open('{}'.format(golf.pkl_path) + pf, 'rb') as f:
+            golfers.append(pickle.load(f))
+
+    players = [golfer.name for golfer in golfers]
     players.sort()
+
     if request.method == 'POST':
         course = request.form['scorecard_course']
         if course == 'None':
@@ -151,8 +168,15 @@ def scorecard():
 # teams page
 @app.route('/teams', methods=['GET', 'POST'])
 def teams():
-    players = golf.coll.distinct('name')
+    allfiles = [f for f in listdir(golf.pkl_path) if isfile(join(golf.pkl_path, f))]
+    golfers = []
+    for pf in allfiles:
+        with open('{}'.format(golf.pkl_path) + pf, 'rb') as f:
+            golfers.append(pickle.load(f))
+
+    players = [golfer.name for golfer in golfers]
     players.sort()
+
     if request.method == 'POST':
         course = request.form['course']
         if course == 'None':

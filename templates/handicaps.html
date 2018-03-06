@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>King Classic: Handicaps</title>
+		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+		<meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+	</head>
+  <body>
+    <h2>Handicaps</h2>
+    <form action='/handicaps' method='POST' id='submitform'>
+      Course:<br>
+      <select name="hdcp_course">
+        <option selected value="None" readonly="readonly">-- select course --</option>
+        <option value="Talking Stick - O'odham">Talking Stick - O'odham</option>
+        <option value='Talking Stick - Piipaash'>Talking Stick - Piipaash</option>
+        <option value="Wildfire - Palmer">Wildfire - Palmer</option>
+        <option value="Wildfire - Faldo">Wildfire - Faldo</option>
+        <option value="Whirlwind - Devil's Claw">Whirlwind - Devil's Claw</option>
+        <option value="Whirlwind - Cattail">Whirlwind - Cattail</option>
+      </select>
+      <br><br>
+      <input type='submit' value="Submit"/>
+    </form>
+    <h4>{{msg|safe}}</h4>
+    <h4>{{course|safe}}</h4>
+    <p>{{hdcps_df|safe}}</p>
+    <h4><a href="{{ url_for('index') }}">Home</a></h4>
+  </body>
+</html>
