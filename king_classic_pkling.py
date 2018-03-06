@@ -564,77 +564,77 @@ if __name__ == '__main__':
     golf = PlayGolf()
 
     print('Adding players...')
-    golf.add_player('Stuart', 2, True)
-    golf.add_player('Alex', 1, True)
-    golf.add_player('Jerry', 5, True)
-    golf.add_player('Reggie', 5, True)
-    golf.add_player('Pete', 18, True)
-    golf.add_player('Ben', 25, True)
-    golf.add_player('Andy', 8, True)
-    golf.add_player('Josh', 15, True)
-    golf.add_player('Mathias', 30, True)
+    golf.add_player('Stuart King', 3, True)
+    golf.add_player('Alex King', 2, True)
+    golf.add_player('Jerry King', 6, True)
+    golf.add_player('Reggie Sherrill', 6, True)
+    golf.add_player('Pete Nash', 18, True)
+    golf.add_player('Ben Donahue', 25, True)
+    golf.add_player('Andy Tapper', 8, True)
+    golf.add_player('Josh Duckett', 15, True)
+    golf.add_player('Mathias Jackson', 30, True)
 
     print("Adding Stuart's scores...")
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Stuart', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
+        golf.add_score('Stuart King', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Stuart', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
+        golf.add_score('Stuart King', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
     # for idx, _ in enumerate(range(18)):
-    #     golf.add_score('Stuart', 'Wildfire - Palmer', idx+1, np.random.randint(3,7))
+    #     golf.add_score('Stuart King', 'Wildfire - Palmer', idx+1, np.random.randint(3,7))
     # for idx, _ in enumerate(range(18)):
-    #     golf.add_score('Stuart', 'Wildfire - Faldo', idx+1, np.random.randint(3,7))
+    #     golf.add_score('Stuart King', 'Wildfire - Faldo', idx+1, np.random.randint(3,7))
     # for idx, _ in enumerate(range(18)):
-    #     golf.add_score('Stuart', "Whirlwind - Devil's Claw", idx+1, np.random.randint(3,7))
+    #     golf.add_score('Stuart King', "Whirlwind - Devil's Claw", idx+1, np.random.randint(3,7))
     # for idx, _ in enumerate(range(18)):
-    #     golf.add_score('Stuart', 'Whirlwind - Cattail', idx+1, np.random.randint(3,7))
+    #     golf.add_score('Stuart King', 'Whirlwind - Cattail', idx+1, np.random.randint(3,7))
 
     print("Adding Alex's scores...")
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Alex', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
+        golf.add_score('Alex King', "Talking Stick - O'odham", idx+1, np.random.randint(3,6))
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Alex', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
+        golf.add_score('Alex King', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,6))
 
     print("Adding Jerry's scores...")
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Jerry', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
+        golf.add_score('Jerry King', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Jerry', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
+        golf.add_score('Jerry King', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
 
     print("Adding Reggie's scores...")
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Reggie', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
+        golf.add_score('Reggie Sherrill', "Talking Stick - O'odham", idx+1, np.random.randint(3,7))
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Reggie', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
+        golf.add_score('Reggie Sherrill', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
 
     print("Adding Pete's scores...")
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Pete', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
+        golf.add_score('Pete Nash', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Pete', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
+        golf.add_score('Pete Nash', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
 
     print("Adding Ben's scores...")
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Ben', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
+        golf.add_score('Ben Donahue', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Ben', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
+        golf.add_score('Ben Donahue', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
 
     print("Adding Andy's scores...")
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Andy', "Talking Stick - O'odham", idx+1, np.random.randint(4,7))
+        golf.add_score('Andy Tapper', "Talking Stick - O'odham", idx+1, np.random.randint(4,7))
     for idx, _ in enumerate(range(18)):
         golf.add_score('Andy', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,7))
 
     print("Adding Josh's scores...")
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Josh', "Talking Stick - O'odham", idx+1, np.random.randint(4,7))
+        golf.add_score('Josh Duckett', "Talking Stick - O'odham", idx+1, np.random.randint(4,7))
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Josh', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,7))
+        golf.add_score('Josh Duckett', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,7))
 
     print("Adding Mathias' scores...")
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Mathias', "Talking Stick - O'odham", idx+1, np.random.randint(5,9))
+        golf.add_score('Mathias Jackson', "Talking Stick - O'odham", idx+1, np.random.randint(5,8))
     for idx, _ in enumerate(range(18)):
-        golf.add_score('Mathias', 'Talking Stick - Piipaash', idx+1, np.random.randint(5,9))
+        golf.add_score('Mathias Jackson', 'Talking Stick - Piipaash', idx+1, np.random.randint(5,8))
 
     # hdcp = golf.calc_handicap('Alex', "Whirlwind - Devil's Claw")
     # df = golf.show_handicaps("Whirlwind - Devil's Claw")
