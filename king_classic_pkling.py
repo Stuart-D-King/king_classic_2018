@@ -333,9 +333,9 @@ class PlayGolf(object):
             back_tot = sum(back)
             total = golfer.calc_course_score(course)
             net_total = golfer.calc_course_score(course, net=True)
-            # hdcp = self.calc_handicap(player, course)
+            hdcp = self.calc_handicap(golfer, course)
 
-            score = front + [front_tot] + back + [back_tot, total, total - net_total, net_total]
+            score = front + [front_tot] + back + [back_tot, total, hdcp, net_total]
             scores.append(score)
 
         idx = ['Par', 'Hdcp'] + players.copy()
