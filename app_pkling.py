@@ -4,18 +4,14 @@ import pandas as pd
 from king_classic_pkling import PlayGolf, Player
 from flask import Flask, request, redirect, url_for, render_template
 from collections import Counter
-from werkzeug.utils import secure_filename
 from os import listdir
 from os.path import isfile, join
 import pickle
-import time
 import pdb
 
 
 app = Flask(__name__)
 golf = PlayGolf()
-allowed_extenstions = set(['gif', 'png', 'jpg', 'jpeg', 'GIF', 'PNG', 'JPG', 'JPEG'])
-app.config['upload_folder'] = 'static/img_uploads/'
 
 
 # helper function
@@ -240,33 +236,6 @@ def handicaps():
         return render_template('handicaps.html', hdcps_df=hdcps_df.to_html(index=False), course=course)
 
     return render_template('handicaps.html')
-
-
-@app.route('/upload_pic', methods=['GET', 'POST'])
-def upload_pic():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            # flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-
-        if file.filename == '':
-            # flash('No file selected')
-            return redirect(request.url)
-
-        if file and allowed_file(file.filename):
-            ext = os.path.splitext(file.filename)[1]
-            timestr = time.strftime("%Y%m%d-%H%M%S")
-            filename = secure_filename(timestr + ext)
-
-            file_path = os.path.join(app.config['upload_folder'], filename)
-            file.save(file_path)
-
-            msg = 'Photo uploaded successfully!'
-            return render_template('upload_pic.html', msg=msg)
-
-    return render_template('upload_pic.html')
 
 
 if __name__ == '__main__':

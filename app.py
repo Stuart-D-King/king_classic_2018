@@ -2,18 +2,14 @@ import numpy as np
 import pandas as pd
 from pymongo import MongoClient
 from king_classic import PlayGolf, Player
-# from king_classic_pkling import PlayGolf, Player
 from flask import Flask, request, redirect, url_for, render_template
 from collections import Counter
-from werkzeug.utils import secure_filename
 import os
 import pdb
 
 
 app = Flask(__name__)
 golf = PlayGolf('2018')
-allowed_extenstions = set(['png', 'jpg', 'jpeg', 'PNG', 'JPG'])
-app.config['upload_folder'] = 'static/img_uploads/'
 
 
 # helper function
@@ -217,27 +213,6 @@ def handicaps():
         return render_template('handicaps.html', hdcps_df=hdcps_df.to_html(index=False), course=course)
 
     return render_template('handicaps.html')
-
-
-@app.route('/upload_pic', methods=['GET', 'POST'])
-def upload_pic():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            # flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-
-        if file.filename == '':
-            # flash('No file selected')
-            return redirect(request.url)
-
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['upload_folder'], filename)
-            file.save(file_path)
-
-            return render_template('upload_pic.html')
 
 
 if __name__ == '__main__':
