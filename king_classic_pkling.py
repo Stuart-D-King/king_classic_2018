@@ -8,6 +8,7 @@ from scipy.stats import rankdata
 import folium
 from os import listdir, makedirs
 from os.path import isfile, join, exists
+import boto3
 
 
 def past_locations_map():
@@ -128,25 +129,43 @@ class PlayGolf(object):
         self.pkl_path = 'pkl_files/'
 
 
+    def to_bucket(self, f_name):
+        '''
+        Write file to s3 bucket
+
+        INPUT: f - file to write
+        '''
+        # Specify the service
+        s3 = boto3.resource('s3')
+        write_name = f_name.replace('_','-')
+        s3.Bucket('king-classic-2018').upload_file(f_name, write_name)
+
+
     def add_player(self, name, hdcp, skins=True):
         if not exists(self.pkl_path):
             makedirs(self.pkl_path)
 
         if not isfile(self.pkl_path + name.strip().lower().replace(' ','_')):
             golfer = Player(name, hdcp, self.courses, skins)
-            with open('{}{}.pkl'.format(self.pkl_path, name.strip().lower().replace(' ','_')), 'wb') as f:
+            f_name = '{}{}.pkl'.format(self.pkl_path, name.strip().lower().replace(' ','_'))
+            with open(f_name, 'wb') as f:
                 pickle.dump(golfer, f)
+
+            self.to_bucket(f_name)
 
 
     def add_score(self, player, course, hole, score):
         hdcp = self.calc_handicap(player, course)
-        with open('{}{}.pkl'.format(self.pkl_path, player.strip().lower().replace(' ','_')), 'rb') as f:
+        f_name = '{}{}.pkl'.format(self.pkl_path, player.strip().lower().replace(' ','_'))
+        with open(f_name, 'rb') as f:
             golfer = pickle.load(f)
 
         golfer.post_score(course, hole, score, hdcp)
 
-        with open('{}{}.pkl'.format(self.pkl_path, player.strip().lower().replace(' ','_')), 'wb') as f:
+        with open(f_name, 'wb') as f:
             pickle.dump(golfer, f)
+
+        self.to_bucket(f_name)
 
 
     def show_player_course_score(self, player, course, net=False):
