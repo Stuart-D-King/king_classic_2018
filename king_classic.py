@@ -337,10 +337,10 @@ class PlayGolf(object):
         doc = self.coll.find_one({'name': player})
         golfer = pickle.loads(doc['player'])
 
-        if course == 'Wildfire - Palmer':
+        if course == 'Wildfire - Faldo':
             check_a = []
             check_b = []
-            for c in ["Talking Stick - O'odham", 'Talking Stick - Piipaash']:
+            for c in ['Talking Stick - Piipaash', "Talking Stick - O'odham"]:
                 if all(golfer.show_scorecard(c).values()):
                     c_par, _ = self.courses[c]
                     check_a.append((sum(c_par) + golfer.hdcp) - golfer.calc_course_score(c) >= 4)
@@ -354,10 +354,10 @@ class PlayGolf(object):
             else:
                 return golfer.hdcp
 
-        elif course == 'Wildfire - Faldo':
+        elif course == 'Wildfire - Palmer':
             check1_a = []
             check1_b = []
-            for c in ["Talking Stick - O'odham", 'Talking Stick - Piipaash']:
+            for c in ['Talking Stick - Piipaash', "Talking Stick - O'odham"]:
                 if all(golfer.show_scorecard(c).values()):
                     c_par, _ = self.courses[c]
                     check1_a.append((sum(c_par) + golfer.hdcp) - golfer.calc_course_score(c) >= 4)
@@ -374,7 +374,7 @@ class PlayGolf(object):
 
             check2_a = []
             check2_b = []
-            for c in ['Talking Stick - Piipaash', 'Wildfire - Palmer']:
+            for c in ["Talking Stick - O'odham", 'Wildfire - Faldo']:
                 if all(golfer.show_scorecard(c).values()):
                     c_par, _ = self.courses[c]
                     check2_a.append((sum(c_par) + hdcp1) - golfer.calc_course_score(c) >= 4)
@@ -392,7 +392,7 @@ class PlayGolf(object):
         elif course == "Whirlwind - Devil's Claw":
             check1_a = []
             check1_b = []
-            for c in ["Talking Stick - O'odham", 'Talking Stick - Piipaash']:
+            for c in ['Talking Stick - Piipaash', "Talking Stick - O'odham"]:
                 if all(golfer.show_scorecard(c).values()):
                     c_par, _ = self.courses[c]
                     check1_a.append((sum(c_par) + golfer.hdcp) - golfer.calc_course_score(c) >= 4)
@@ -409,7 +409,7 @@ class PlayGolf(object):
 
             check2_a = []
             check2_b = []
-            for c in ['Talking Stick - Piipaash', 'Wildfire - Palmer']:
+            for c in ["Talking Stick - O'odham", 'Wildfire - Faldo']:
                 # pdb.set_trace()
                 if all(golfer.show_scorecard(c).values()):
                     c_par, _ = self.courses[c]
@@ -427,7 +427,7 @@ class PlayGolf(object):
 
             check3_a = []
             check3_b = []
-            for c in ['Wildfire - Palmer', 'Wildfire - Faldo']:
+            for c in ['Wildfire - Faldo', 'Wildfire - Palmer']:
                 if all(golfer.show_scorecard(c).values()):
                     c_par, _ = self.courses[c]
                     check3_a.append((sum(c_par) + hdcp2) - golfer.calc_course_score(c) >= 4)
@@ -445,7 +445,7 @@ class PlayGolf(object):
         elif course == 'Whirlwind - Cattail':
             check1_a = []
             check1_b = []
-            for c in ["Talking Stick - O'odham", 'Talking Stick - Piipaash']:
+            for c in ['Talking Stick - Piipaash', "Talking Stick - O'odham"]:
                 if all(golfer.show_scorecard(c).values()):
                     c_par, _ = self.courses[c]
                     check1_a.append((sum(c_par) + golfer.hdcp) - golfer.calc_course_score(c) >= 4)
@@ -462,7 +462,7 @@ class PlayGolf(object):
 
             check2_a = []
             check2_b = []
-            for c in ['Talking Stick - Piipaash', 'Wildfire - Palmer']:
+            for c in ["Talking Stick - O'odham", 'Wildfire - Faldo']:
                 if all(golfer.show_scorecard(c).values()):
                     c_par, _ = self.courses[c]
                     check2_a.append((sum(c_par) + hdcp1) - golfer.calc_course_score(c) >= 4)
@@ -479,7 +479,7 @@ class PlayGolf(object):
 
             check3_a = []
             check3_b = []
-            for c in ['Wildfire - Palmer', 'Wildfire - Faldo']:
+            for c in ['Wildfire - Faldo', 'Wildfire - Palmer']:
                 if all(golfer.show_scorecard(c).values()):
                     c_par, _ = self.courses[c]
                     check3_a.append((sum(c_par) + hdcp2) - golfer.calc_course_score(c) >= 4)
@@ -496,7 +496,7 @@ class PlayGolf(object):
 
             check4_a = []
             check4_b = []
-            for c in ['Wildfire - Faldo', "Whirlwind - Devil's Claw"]:
+            for c in ['Wildfire - Palmer', "Whirlwind - Devil's Claw"]:
                 if all(golfer.show_scorecard(c).values()):
                     c_par, _ = self.courses[c]
                     check4_a.append((sum(c_par) + hdcp3) - golfer.calc_course_score(c) >= 4)
