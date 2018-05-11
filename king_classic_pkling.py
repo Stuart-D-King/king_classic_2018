@@ -48,6 +48,7 @@ class Player(object):
     def create_scorecard(self, course):
         self.scores[course] = dict((x,0) for x in range(1,19))
         self.net_scores[course] = dict((x,0) for x in range(1,19))
+        self.skins_scores[course] = dict((x,0) for x in range(1,19))
 
 
     def post_score(self, course, hole, score, hdcp):
@@ -55,6 +56,13 @@ class Player(object):
 
         par, hdcps = self.courses[course]
         hole_hdcp = hdcps[hole - 1]
+
+        if hole_hdcp <= hdcp:
+            self.skins_scores[course][hole] = score - 1
+        elif hdcp < 0 and hole_hdcp <= abs(hdcp):
+            self.skins_scores[course][hole] = score + 1
+        else:
+            self.skins_scores[course][hole] = score
 
         if hdcp > 18:
             super_hdcp = hdcp - 18
@@ -227,7 +235,7 @@ class PlayGolf(object):
         scores = []
         if net:
             for player in players:
-                scores.append(list(player.net_scores[course].values()))
+                scores.append(list(player.skins_scores[course].values()))
         else:
             for player in players:
                 scores.append(list(player.scores[course].values()))
@@ -585,13 +593,8 @@ if __name__ == '__main__':
     print('Adding players...')
     golf.add_player('Stuart King', 3, True)
     golf.add_player('Alex King', 2, True)
-    golf.add_player('Jerry King', 6, True)
-    golf.add_player('Reggie Sherrill', 6, True)
-    golf.add_player('Pete Nash', 18, True)
-    golf.add_player('Ben Donahue', 25, True)
-    golf.add_player('Andy Tapper', 8, True)
-    golf.add_player('Josh Duckett', 15, True)
-    golf.add_player('Mathias Jackson', 30, True)
+    golf.add_player('Jerry King', 7, True)
+    golf.add_player('Reggie Sherrill', 7, True)
 
     print("Adding Stuart's scores...")
     for idx, _ in enumerate(range(18)):
@@ -625,41 +628,12 @@ if __name__ == '__main__':
     for idx, _ in enumerate(range(18)):
         golf.add_score('Reggie Sherrill', 'Talking Stick - Piipaash', idx+1, np.random.randint(3,7))
 
-    print("Adding Pete's scores...")
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Pete Nash', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Pete Nash', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
-
-    print("Adding Ben's scores...")
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Ben Donahue', "Talking Stick - O'odham", idx+1, np.random.randint(4,8))
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Ben Donahue', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,8))
-
-    print("Adding Andy's scores...")
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Andy Tapper', "Talking Stick - O'odham", idx+1, np.random.randint(4,7))
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Andy Tapper', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,7))
-
-    print("Adding Josh's scores...")
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Josh Duckett', "Talking Stick - O'odham", idx+1, np.random.randint(4,7))
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Josh Duckett', 'Talking Stick - Piipaash', idx+1, np.random.randint(4,7))
-
-    print("Adding Mathias' scores...")
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Mathias Jackson', "Talking Stick - O'odham", idx+1, np.random.randint(5,8))
-    for idx, _ in enumerate(range(18)):
-        golf.add_score('Mathias Jackson', 'Talking Stick - Piipaash', idx+1, np.random.randint(5,8))
 
     # hdcp = golf.calc_handicap('Alex', "Whirlwind - Devil's Claw")
     # df = golf.show_handicaps("Whirlwind - Devil's Claw")
     # df = golf.calc_skins('Talking Stick - Piipaash')
 
-    # teams = [('Stuart', 'Jerry'), ('Alex', 'Reggie'), ('Pete', 'Ben')]
+    # teams = [('Stuart', 'Jerry'), ('Alex', 'Reggie')]
     # df = golf.calc_teams(teams, 'Talking Stick - Piipaash')
 
-    # df2 = golf.player_scorecards(['Mathias', 'Pete'],'Talking Stick - Piipaash')
+    # df2 = golf.player_scorecards(['Alex', 'Stuart'],'Talking Stick - Piipaash')
