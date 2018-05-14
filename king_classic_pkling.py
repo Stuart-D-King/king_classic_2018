@@ -333,7 +333,7 @@ class PlayGolf(object):
         return df
 
 
-    def player_scorecards(self, players, course):
+    def player_scorecards(self, players, course, net=False):
         course_par, course_hdcps = self.courses[course]
         front_par = sum(course_par[:9])
         back_par = sum(course_par[9:])
@@ -354,14 +354,21 @@ class PlayGolf(object):
         for player in players:
             golfer = dct[player]
 
-            front = golfer.front_nine(course)
-            front_tot = sum(front)
-            back = golfer.back_nine(course)
-            back_tot = sum(back)
-            total = golfer.calc_course_score(course)
-            net_total = golfer.calc_course_score(course, net=True)
+            if net:
+                front = golfer.front_nine(course, net=True)
+                front_tot = sum(front)
+                back = golfer.back_nine(course, net=True)
+                back_tot = sum(back)
+                total = golfer.calc_course_score(course, net=True)
+                net_total = golfer.calc_course_score(course, net=True)
+            else:
+                front = golfer.front_nine(course)
+                front_tot = sum(front)
+                back = golfer.back_nine(course)
+                back_tot = sum(back)
+                total = golfer.calc_course_score(course)
+                net_total = golfer.calc_course_score(course, net=True)
             hdcp = self.calc_handicap(player, course)
-
             score = front + [front_tot] + back + [back_tot, total, hdcp, net_total]
             scores.append(score)
 

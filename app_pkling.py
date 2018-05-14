@@ -158,12 +158,17 @@ def scorecard():
 
     if request.method == 'POST':
         course = request.form['scorecard_course']
+        net = request.form['net']
+        if net == 'Yes':
+            net = True
+        else:
+            net = False
         if course == 'None':
             msg = 'Please select a course.'
             return render_template('scorecard.html', players=players, msg=msg)
 
         golfers = request.form.getlist('golfers')
-        scorecard_df = golf.player_scorecards(golfers, course)
+        scorecard_df = golf.player_scorecards(golfers, course, net)
         return render_template('scorecard_results.html', scorecard_df=scorecard_df.to_html(), course=course)
 
     return render_template('scorecard.html', players=players)
