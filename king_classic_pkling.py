@@ -39,6 +39,7 @@ class Player(object):
         self.hdcp = hdcp
         self.scores = dict()
         self.net_scores = dict()
+        self.skins_scores = dict()
         self.courses = courses
 
         for course, (par, hdcps) in self.courses.items():
