@@ -99,7 +99,7 @@ class Player(object):
         return front
 
 
-    def back_nine(self, course, net=False, skins=Falose):
+    def back_nine(self, course, net=False, skins=False):
         if net:
             back = [v for k,v in self.net_scores[course].items()][9:]
             return back
