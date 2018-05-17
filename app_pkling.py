@@ -133,7 +133,7 @@ def skins():
 
             skins_df = golf.calc_skins(course)
             golfers = skins_df['Player'].tolist()
-            scorecard_df = golf.player_scorecards(golfers, course)
+            scorecard_df = golf.player_scorecards(golfers, course, skins=True)
 
             return render_template('skins_results.html', skins_df=skins_df.to_html(index=False), scorecard_df=scorecard_df.to_html(), course=course)
 

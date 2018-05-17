@@ -86,27 +86,39 @@ class Player(object):
         return self.scores[course]
 
 
-    def front_nine(self, course, net=False):
+    def front_nine(self, course, net=False, skins=False):
         if net:
             front = [v for k, v in self.net_scores[course].items()][:9]
+            return front
+
+        if skins:
+            front = [v for k, v in self.skins_scores[course].items()][:9]
             return front
 
         front = [v for k, v in self.scores[course].items()][:9]
         return front
 
 
-    def back_nine(self, course, net=False):
+    def back_nine(self, course, net=False, skins=Falose):
         if net:
             back = [v for k,v in self.net_scores[course].items()][9:]
+            return back
+
+        if skins:
+            back = [v for k,v in self.skins_scores[course].items()][9:]
             return back
 
         back = [v for k, v in self.scores[course].items()][9:]
         return back
 
 
-    def calc_course_score(self, course, net=False):
+    def calc_course_score(self, course, net=False, skins=False):
         if net:
             net_score = sum(self.net_scores[course].values())
+            return net_score
+
+        if skins:
+            net_score = sum(self.skins_scores[course].values())
             return net_score
 
         score = sum(self.scores[course].values())
@@ -334,7 +346,7 @@ class PlayGolf(object):
         return df
 
 
-    def player_scorecards(self, players, course, net=False):
+    def player_scorecards(self, players, course, net=False, skins=False):
         course_par, course_hdcps = self.courses[course]
         front_par = sum(course_par[:9])
         back_par = sum(course_par[9:])
@@ -362,6 +374,13 @@ class PlayGolf(object):
                 back_tot = sum(back)
                 total = golfer.calc_course_score(course, net=True)
                 net_total = golfer.calc_course_score(course, net=True)
+            elif skins:
+                front = golfer.front_nine(course, skins=True)
+                front_tot = sum(front)
+                back = golfer.back_nine(course, skins=True)
+                back_tot = sum(back)
+                total = golfer.calc_course_score(course, skins=True)
+                net_total = golfer.calc_course_score(course, skins=True)
             else:
                 front = golfer.front_nine(course)
                 front_tot = sum(front)
